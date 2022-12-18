@@ -1,12 +1,16 @@
 import React from 'react';
-import { useSpring, animated, easings } from '@react-spring/web';
+import { useSpring, animated } from '@react-spring/web';
 
 export default function VectorMap({ visible }) {
   const styles = useSpring({
+    opacity: visible ? 1 : 0,
     transform: visible
       ? 'translate3d(0px, 0px, 0x`px)'
-      : 'translate3d(0px, -200px, 0px)',
-    opacity: visible ? 1 : 0,
+      : 'translate3d(0px, -75px, 0px)',
+    config: {
+      friction: visible && 14,
+      tension: visible && 120,
+    },
   });
 
   return (

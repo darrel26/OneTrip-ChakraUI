@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container } from '@chakra-ui/react';
+import { Container, Text, VStack } from '@chakra-ui/react';
 import { useInView } from '@react-spring/web';
 
 import VectorMap from './components/VectorMap';
@@ -15,7 +15,16 @@ export default function AboutUsSection() {
       mt={48}
       ref={ref}
     >
-      <VectorMap visible={inView} />
+      <VStack>
+        {console.log(inView)}
+        <VectorMap visible={inView} />
+        <Text>
+          One Trip is a trip planner app for users to determine the destination
+          of the tourist attractions they will go to. This app should help
+          users, to collect information about the places they want to go based
+          on their location choices, and plan their trip.
+        </Text>
+      </VStack>
     </Container>
   );
 }

@@ -32,8 +32,15 @@ export default function FeaturesSection() {
       justifyContent="center"
     >
       <HStack h="full" justifyContent="center" w="100vw" spacing={8}>
-        {cardData.map(({ image, heading, text }) => {
-          return <FeatureCard image={image} heading={heading} text={text} />;
+        {cardData.map(({ image, heading, text }, index) => {
+          return (
+            <FeatureCard
+              image={image}
+              heading={heading}
+              text={text}
+              key={index}
+            />
+          );
         })}
       </HStack>
     </Container>

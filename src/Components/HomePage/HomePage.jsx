@@ -8,8 +8,8 @@ export default function HomePage() {
   return (
     <React.Fragment>
       <HeroSection />
-      <FeaturesSection />
       <AboutUsSection />
+      <FeaturesSection />
       <CTASection />
     </React.Fragment>
   );

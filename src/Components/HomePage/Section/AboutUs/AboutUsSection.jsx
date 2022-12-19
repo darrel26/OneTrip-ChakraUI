@@ -9,16 +9,21 @@ export default function AboutUsSection() {
   return (
     <Container
       maxW="container.xl"
-      h="60vh"
+      h="80vh"
       display="flex"
       justifyContent="center"
       mt={48}
       ref={ref}
     >
       <VStack>
-        {console.log(inView)}
         <VectorMap visible={inView} />
-        <Text>
+        <Text
+          w="80%"
+          pt={32}
+          fontSize={26}
+          textAlign="center"
+          textColor="gray.400"
+        >
           One Trip is a trip planner app for users to determine the destination
           of the tourist attractions they will go to. This app should help
           users, to collect information about the places they want to go based

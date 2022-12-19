@@ -27,9 +27,11 @@ export default function FeaturesSection() {
   return (
     <Container
       maxW="container.xl"
-      h="60vh"
+      h="auto"
       display="flex"
       justifyContent="center"
+      pt={40}
+      pb={28}
     >
       <HStack h="full" justifyContent="center" w="100vw" spacing={8}>
         {cardData.map(({ image, heading, text }, index) => {

@@ -125,7 +125,7 @@ export default function VectorMap({ visible }) {
       return {
         opacity: visible ? 1 : 0,
         transform: visible
-          ? 'translate3d(0px, 0px, 0x`px)'
+          ? 'translate3d(0px, 0px, 0px)'
           : 'translate3d(0px, -75px, 0px)',
         config: {
           friction: visible && 14,
@@ -142,8 +142,8 @@ export default function VectorMap({ visible }) {
       return {
         opacity: visible ? 1 : 0,
         transform: visible
-          ? 'translate3d(0px, 0px, 0x`px)'
-          : 'translate3d(0px, -75px, 0px)',
+          ? 'translate3d(0px, 0px, 0px)'
+          : 'translate3d(0px, -200px, 0px)',
         config: {
           friction: visible && 14,
           tension: visible && 120,

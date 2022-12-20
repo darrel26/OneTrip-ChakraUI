@@ -3,20 +3,7 @@ import { VStack, Heading, HStack, Icon, Text } from '@chakra-ui/react';
 import { CalendarIcon } from '@chakra-ui/icons';
 import PlaceToVisit from './PlaceToVisit';
 
-export default function TripData({ center }) {
-  const [placeData, setPlaceData] = useState([]);
-
-  const addPlaces = (placeDetail) => {
-    if (placeData.length !== 0) {
-      setPlaceData([...placeData, placeDetail]);
-    } else {
-      setPlaceData([placeDetail]);
-    }
-  };
-
-  useEffect(() => {
-    console.log(placeData);
-  }, [placeData]);
+export default function TripData({ center, recommendation, setRecommendation, placeData, addPlaces }) {
 
   return (
     <VStack
@@ -42,6 +29,8 @@ export default function TripData({ center }) {
         <Text>11/25 - 11/30</Text>
       </HStack>
       <PlaceToVisit
+        recommendation={recommendation}
+        setRecommendation={setRecommendation}
         center={center}
         placeData={placeData}
         addPlaces={addPlaces}

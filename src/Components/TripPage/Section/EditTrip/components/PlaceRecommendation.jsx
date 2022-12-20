@@ -9,9 +9,8 @@ import {
   Grid,
 } from '@chakra-ui/react';
 
-export default function PlaceRecommendation() {
+export default function PlaceRecommendation({item}) {
   return (
-    <Grid autoFlow="column" autoColumns="45%" overflowX="scroll">
       <Card
         direction={{ base: 'column', sm: 'row' }}
         variant="outline"
@@ -19,54 +18,11 @@ export default function PlaceRecommendation() {
         maxH="75px"
       >
         <HStack>
+          <Image src={item.photos ? item.photos[0].getUrl() : 'https://via.placeholder.com/200'} w="30%"></Image>
           <CardBody w="70%">
-            <Text fontWeight="medium">Latte Places</Text>
+            <Text fontWeight="medium">{item.name}</Text>
           </CardBody>
-          <Image src="https://via.placeholder.com/200" w="30%"></Image>
         </HStack>
       </Card>
-      <Card
-        direction={{ base: 'column', sm: 'row' }}
-        overflow="hidden"
-        variant="outline"
-        maxW="250px"
-        maxH="75px"
-      >
-        <HStack>
-          <CardBody w="70%">
-            <Text fontWeight="medium">Latte Places</Text>
-          </CardBody>
-          <Image src="https://via.placeholder.com/200" w="30%"></Image>
-        </HStack>
-      </Card>
-      <Card
-        direction={{ base: 'column', sm: 'row' }}
-        overflow="hidden"
-        variant="outline"
-        maxW="250px"
-        maxH="75px"
-      >
-        <HStack>
-          <CardBody w="70%">
-            <Text fontWeight="medium">Latte Places</Text>
-          </CardBody>
-          <Image src="https://via.placeholder.com/200" w="30%"></Image>
-        </HStack>
-      </Card>
-      <Card
-        direction={{ base: 'column', sm: 'row' }}
-        overflow="hidden"
-        variant="outline"
-        maxW="250px"
-        maxH="75px"
-      >
-        <HStack>
-          <CardBody w="70%">
-            <Text fontWeight="medium">Latte Places</Text>
-          </CardBody>
-          <Image src="https://via.placeholder.com/200" w="30%"></Image>
-        </HStack>
-      </Card>
-    </Grid>
   );
 }

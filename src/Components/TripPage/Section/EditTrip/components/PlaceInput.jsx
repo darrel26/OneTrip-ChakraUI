@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 import { LocationIcon } from '../../../../../assets/Icons/icons';
 import { Autocomplete } from '@react-google-maps/api';
 
-export default function PlaceInput({ center, addPlaces }) {
+export default function PlaceInput({ center, addPlaces, setRecommendation }) {
   const [autocomplete, setAutocomplete] = useState();
   const [placeDetail, setPlaceDetail] = useState();
   return (

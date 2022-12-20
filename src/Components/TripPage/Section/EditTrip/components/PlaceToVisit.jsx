@@ -8,13 +8,13 @@ import {
   Box,
   Text,
   VStack,
+  Grid
 } from '@chakra-ui/react';
 import PlaceCard from './PlaceCard';
 import PlaceInput from './PlaceInput';
 import PlaceRecommendation from './PlaceRecommendation';
 
-export default function PlaceToVisit({ center, placeData, addPlaces }) {
-  const [recommendation, setRecommendation] = useState([]);
+export default function PlaceToVisit({ center, placeData, addPlaces, recommendation, setRecommendation }) {
 
   return (
     <Accordion w="full" defaultIndex={[0]} allowMultiple py={10}>
@@ -50,8 +50,14 @@ export default function PlaceToVisit({ center, placeData, addPlaces }) {
                 );
               }
             )}
-            <PlaceInput center={center} addPlaces={addPlaces} />
-            <PlaceRecommendation />
+            <PlaceInput setRecommendation={setRecommendation} center={center} addPlaces={addPlaces} />
+            <Grid autoFlow="column" autoColumns="45%" overflowX="scroll">
+              {
+                recommendation.map((item,index) => (
+                  <PlaceRecommendation item={item} key={index}/>
+                ))
+              }
+            </Grid>
           </VStack>
         </AccordionPanel>
       </AccordionItem>

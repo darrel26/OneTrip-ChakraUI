@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { useJsApiLoader, GoogleMap } from '@react-google-maps/api';
+import { useJsApiLoader, GoogleMap, MarkerF} from '@react-google-maps/api';
 import { Container, HStack, Flex } from '@chakra-ui/react';
 import EditTripSection from './Section/EditTrip/EditTripSection';
 
@@ -31,7 +31,7 @@ export default function TripPage() {
   const getRecommendation = (geometry) => {
     const request = {
       location: geometry,
-      radius: '1500',
+      radius: '500',
       type: ['restaurant']
     }
     placeServices.nearbySearch(request, (response) => {
@@ -46,7 +46,7 @@ export default function TripPage() {
 
   useEffect(() =>{
     if (placeData.length > 0) {
-      getRecommendation({lat:placeData[0].geometry.location.lat(), lng:placeData[0].geometry.location.lng()})
+      getRecommendation({lat:placeData[placeData.length-1].geometry.location.lat(), lng:placeData[placeData.length-1].geometry.location.lng()})
     }
   },[placeData])
 
@@ -63,7 +63,16 @@ export default function TripPage() {
             zoom={14}
             center={center}
             onLoad={(map) => onLoad(map)}
-          ></GoogleMap>
+          >
+            {
+              placeData.map((item,index) => (
+                <MarkerF
+                    key={index}
+                    position={{lat:item.geometry.location.lat(), lng:item.geometry.location.lng()}}
+                />
+              ))
+            }
+          </GoogleMap>
         </HStack>
       ) : (
         console.log(`ERROR TO LOAD GOOGLE MAP API ${loadError}`)

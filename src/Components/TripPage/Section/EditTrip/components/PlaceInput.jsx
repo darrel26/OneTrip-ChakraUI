@@ -23,10 +23,10 @@ export default function PlaceInput({ center, addPlaces, setRecommendation }) {
           }}
           className="auto-complete-add-place"
           bounds={{
-            north: center.lat + 0.1,
-            south: center.lat - 0.1,
-            east: center.lng + 0.1,
-            west: center.lng - 0.1,
+            north: center.lat + 0.04,
+            south: center.lat - 0.04,
+            east: center.lng + 0.04,
+            west: center.lng - 0.04,
           }}
           options={{
             strictBounds: true,

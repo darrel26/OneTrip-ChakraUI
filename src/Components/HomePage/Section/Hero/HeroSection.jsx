@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Container, Flex, HStack, VStack, IconButton, Link } from '@chakra-ui/react';
-import { AddIcon } from '@chakra-ui/icons';
+import { AddIcon, CalendarIcon } from '@chakra-ui/icons';
 import HeroDescription from './components/HeroDescription';
 import HeroTitle from './components/HeroTitle';
 import InputDate from './components/InputDate';
@@ -10,6 +10,9 @@ import HeroBg from '../../../../assets/HomePage/hero-section-bg.svg';
 
 
 export default function HomePage() {
+  const [startDate, setStartDate] = useState(null)
+  const [endDate, setEndDate] = useState(null)
+
   return (
     <Container
       maxW="100vw"
@@ -42,8 +45,8 @@ export default function HomePage() {
               borderRadius="xl"
             >
               <InputLocation />
-              <InputDate />
-              <InputDate />
+              <InputDate startPicker={true} endPicker={false} date={startDate} setDate={setStartDate} placeholder="Start Date" maxDate={endDate}/>
+              <InputDate startPicker={false} endPicker={true} date={endDate} setDate={setEndDate} placeholder="End Date" minDate={startDate}/>
               <Link href="/trip"><IconButton Link colorScheme="teal" p={8} icon={<AddIcon />} /></Link>
             </HStack>
           </VStack>

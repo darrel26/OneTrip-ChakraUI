@@ -1,10 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { VStack, Heading, HStack, Icon, Text } from '@chakra-ui/react';
+import React from 'react';
+import {
+  VStack,
+  Heading,
+  HStack,
+  Icon,
+  Text,
+  Accordion,
+} from '@chakra-ui/react';
 import { CalendarIcon } from '@chakra-ui/icons';
 import PlaceToVisit from './PlaceToVisit';
+import Budgetting from './Budgetting';
 
-export default function TripData({ center, recommendation, setRecommendation, placeData, addPlaces }) {
-
+export default function TripData({
+  center,
+  recommendation,
+  setRecommendation,
+  placeData,
+  addPlaces,
+}) {
   return (
     <VStack
       css={{
@@ -28,13 +41,17 @@ export default function TripData({ center, recommendation, setRecommendation, pl
         <Icon as={CalendarIcon}></Icon>
         <Text>11/25 - 11/30</Text>
       </HStack>
-      <PlaceToVisit
-        recommendation={recommendation}
-        setRecommendation={setRecommendation}
-        center={center}
-        placeData={placeData}
-        addPlaces={addPlaces}
-      />
+
+      <Accordion w="full" defaultIndex={[0]} allowMultiple py={10}>
+        <PlaceToVisit
+          recommendation={recommendation}
+          setRecommendation={setRecommendation}
+          center={center}
+          placeData={placeData}
+          addPlaces={addPlaces}
+        />
+        <Budgetting />
+      </Accordion>
     </VStack>
   );
 }

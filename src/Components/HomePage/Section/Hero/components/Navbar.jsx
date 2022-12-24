@@ -8,6 +8,7 @@ import {
 } from '@chakra-ui/react';
 import logo from '../../../../../assets/HomePage/logo.svg';
 import LoginModal from './Login/LoginModal';
+import SignUpModal from './SignUp/SignUpModal';
 
 export default function Navbar() {
   const {
@@ -38,6 +39,7 @@ export default function Navbar() {
         <Button colorScheme="teal" variant="solid" onClick={onSignUpOpen}>
           Sign up
         </Button>
+        <SignUpModal isOpen={isSignUpOpen} onClose={onSignUpClose} />
       </HStack>
     </HStack>
   );

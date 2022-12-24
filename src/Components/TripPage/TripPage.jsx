@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import { useJsApiLoader, GoogleMap, MarkerF} from '@react-google-maps/api';
+import React, { useEffect, useState } from 'react';
+import { useJsApiLoader, GoogleMap, MarkerF } from '@react-google-maps/api';
 import { Container, HStack, Flex } from '@chakra-ui/react';
 import EditTripSection from './Section/EditTrip/EditTripSection';
 
@@ -8,11 +8,11 @@ let placeServices;
 
 const center = {
   lat: -6.914864,
-	lng: 107.608238
+  lng: 107.608238,
 };
 
 export default function TripPage() {
-  const [recommendation, setRecommendation] = useState([])
+  const [recommendation, setRecommendation] = useState([]);
   const [placeData, setPlaceData] = useState([]);
 
   const addPlaces = (placeDetail) => {
@@ -22,7 +22,7 @@ export default function TripPage() {
       setPlaceData([placeDetail]);
     }
   };
-  
+
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: 'AIzaSyBuDXGh0iay6VVMlb3X7Odap7W3mS8ZZiE',
     libraries,
@@ -32,29 +32,68 @@ export default function TripPage() {
     const request = {
       location: geometry,
       radius: '500',
-      type: ['restaurant']
-    }
+      type: ['restaurant'],
+    };
     placeServices.nearbySearch(request, (response) => {
-      setRecommendation(response.slice(0,5))
-      console.log(response.slice(0,5));
-    })
+      setRecommendation(response.slice(0, 5));
+      console.log(response.slice(0, 5));
+    });
   };
 
   const onLoad = (map) => {
     placeServices = new google.maps.places.PlacesService(map);
   };
 
-  useEffect(() =>{
+  useEffect(() => {
     if (placeData.length > 0) {
-      getRecommendation({lat:placeData[placeData.length-1].geometry.location.lat(), lng:placeData[placeData.length-1].geometry.location.lng()})
+      getRecommendation({
+        lat: placeData[placeData.length - 1].geometry.location.lat(),
+        lng: placeData[placeData.length - 1].geometry.location.lng(),
+      });
     }
-  },[placeData])
+  }, [placeData]);
+
+  /* BUDGETTING */
+
+  const [budgetting, setBudgetting] = useState({
+    budget: 0,
+    expenses: [],
+  });
+
+  const addExpenses = (category, amount) => {
+    setBudgetting({
+      ...budgetting,
+      expenses: [
+        ...budgetting.expenses,
+        {
+          category: category,
+          amount: amount,
+        },
+      ],
+    });
+  };
+
+  const addBudget = (amount) => {
+    setBudgetting({
+      ...budgetting,
+      budget: amount,
+    });
+  };
 
   return (
     <Container maxW="100vw" p={0}>
       {isLoaded ? (
         <HStack p={0} spacing={0}>
-          <EditTripSection center={center} recommendation={recommendation} setRecommendation={onLoad} placeData={placeData} addPlaces={addPlaces} />
+          <EditTripSection
+            center={center}
+            recommendation={recommendation}
+            setRecommendation={onLoad}
+            placeData={placeData}
+            addPlaces={addPlaces}
+            budgetting={budgetting}
+            addBudget={addBudget}
+            addExpenses={addExpenses}
+          />
           <GoogleMap
             mapContainerStyle={{
               height: '100vh',
@@ -64,14 +103,15 @@ export default function TripPage() {
             center={center}
             onLoad={(map) => onLoad(map)}
           >
-            {
-              placeData.map((item,index) => (
-                <MarkerF
-                    key={index}
-                    position={{lat:item.geometry.location.lat(), lng:item.geometry.location.lng()}}
-                />
-              ))
-            }
+            {placeData.map((item, index) => (
+              <MarkerF
+                key={index}
+                position={{
+                  lat: item.geometry.location.lat(),
+                  lng: item.geometry.location.lng(),
+                }}
+              />
+            ))}
           </GoogleMap>
         </HStack>
       ) : (

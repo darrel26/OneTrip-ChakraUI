@@ -27,33 +27,9 @@ import { RupiahIcon } from '../../../../../assets/Icons/icons';
 import AddExpensesModal from './AddExpensesModal';
 import ExpensesTable from './ExpensesTable';
 
-export default function Budgetting() {
+export default function Budgetting({ budgetting, addBudget, addExpenses }) {
   const [edit, setEdit] = useState(false);
   const budgetAmount = useRef(null);
-  const [budgetting, setBudgetting] = useState({
-    budget: 0,
-    expenses: [],
-  });
-
-  const addExpenses = (category, amount) => {
-    setBudgetting({
-      ...budgetting,
-      expenses: [
-        ...budgetting.expenses,
-        {
-          category: category,
-          amount: amount,
-        },
-      ],
-    });
-  };
-
-  const addBudget = (amount) => {
-    setBudgetting({
-      ...budgetting,
-      budget: amount,
-    });
-  };
 
   const {
     isOpen: isAddExpensesOpen,
@@ -64,7 +40,6 @@ export default function Budgetting() {
   return (
     <AccordionItem>
       <h2>
-        {console.log(budgetting)}
         <AccordionButton>
           <Box as="span" flex="1" textAlign="left">
             <Text fontWeight="bold">Budgetting</Text>
@@ -91,7 +66,7 @@ export default function Budgetting() {
             <Progress
               colorScheme={
                 budgetting.expenses.length
-                  ? budgetting.budget <
+                  ? budgetting.budget <=
                     budgetting.expenses
                       .map(({ amount }) => parseInt(amount))
                       .reduce((a, b) => a + b)

@@ -17,6 +17,9 @@ export default function TripData({
   setRecommendation,
   placeData,
   addPlaces,
+  budgetting,
+  addBudget,
+  addExpenses,
 }) {
   return (
     <VStack
@@ -50,7 +53,11 @@ export default function TripData({
           placeData={placeData}
           addPlaces={addPlaces}
         />
-        <Budgetting />
+        <Budgetting
+          budgetting={budgetting}
+          addBudget={addBudget}
+          addExpenses={addExpenses}
+        />
       </Accordion>
     </VStack>
   );

@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Accordion,
   AccordionItem,
   AccordionButton,
   AccordionPanel,
@@ -8,57 +7,67 @@ import {
   Box,
   Text,
   VStack,
-  Grid
+  Grid,
 } from '@chakra-ui/react';
 import PlaceCard from './PlaceCard';
 import PlaceInput from './PlaceInput';
 import PlaceRecommendation from './PlaceRecommendation';
 
-export default function PlaceToVisit({ center, placeData, addPlaces, recommendation, setRecommendation }) {
-
+export default function PlaceToVisit({
+  center,
+  placeData,
+  addPlaces,
+  recommendation,
+  setRecommendation,
+}) {
   return (
-      <AccordionItem>
-        <h1>
-          <AccordionButton>
-            <Box as="span" flex="1" textAlign="left">
-              <Text fontWeight="bold">Place To Visit</Text>
-            </Box>
-            <AccordionIcon />
-          </AccordionButton>
-        </h1>
-        <AccordionPanel pb={4}>
-          <VStack alignItems="flex-start" spacing={4}>
-            {placeData.map(
-              (
-                { place_id, photos, formatted_address, name, rating },
-                index
-              ) => {
-                return (
-                  <PlaceCard
-                    key={place_id}
-                    placeImg={
-                      photos
-                        ? photos[0].getUrl()
-                        : 'https://via.placeholder.com/200'
-                    }
-                    index={index}
-                    placeAddress={formatted_address}
-                    placeName={name}
-                    rating={rating}
-                  />
-                );
-              }
-            )}
-            <PlaceInput setRecommendation={setRecommendation} center={center} addPlaces={addPlaces} />
-            <Grid autoFlow="column" autoColumns="45%" gridGap="4" overflowX="auto" overflowY='hidden'>
-              {
-                recommendation.map((item,index) => (
-                  <PlaceRecommendation item={item} key={index}/>
-                ))
-              }
-            </Grid>
-          </VStack>
-        </AccordionPanel>
-      </AccordionItem>
+    <AccordionItem>
+      <h1>
+        <AccordionButton>
+          <Box as="span" flex="1" textAlign="left">
+            <Text fontWeight="bold">Place To Visit</Text>
+          </Box>
+          <AccordionIcon />
+        </AccordionButton>
+      </h1>
+      <AccordionPanel pb={4}>
+        <VStack alignItems="flex-start" spacing={4}>
+          {placeData.map(
+            ({ place_id, photos, formatted_address, name, rating }, index) => {
+              return (
+                <PlaceCard
+                  key={place_id}
+                  placeImg={
+                    photos
+                      ? photos[0].getUrl()
+                      : 'https://via.placeholder.com/200'
+                  }
+                  index={index}
+                  placeAddress={formatted_address}
+                  placeName={name}
+                  rating={rating}
+                />
+              );
+            }
+          )}
+          <PlaceInput
+            setRecommendation={setRecommendation}
+            center={center}
+            addPlaces={addPlaces}
+          />
+          <Grid
+            autoFlow="column"
+            autoColumns="45%"
+            gridGap="4"
+            overflowX="auto"
+            overflowY="hidden"
+          >
+            {recommendation.map((item, index) => (
+              <PlaceRecommendation item={item} key={index} />
+            ))}
+          </Grid>
+        </VStack>
+      </AccordionPanel>
+    </AccordionItem>
   );
 }

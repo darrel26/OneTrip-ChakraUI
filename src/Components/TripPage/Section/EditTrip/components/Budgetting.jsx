@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   AccordionItem,
   AccordionButton,
@@ -11,9 +11,6 @@ import {
   Tr,
   Th,
   Text,
-  Tbody,
-  Tfoot,
-  Td,
   HStack,
   VStack,
   Input,

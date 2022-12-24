@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useJsApiLoader, GoogleMap, MarkerF } from '@react-google-maps/api';
-import { Container, HStack, Flex } from '@chakra-ui/react';
+import { Container, HStack } from '@chakra-ui/react';
 import EditTripSection from './Section/EditTrip/EditTripSection';
 
 let libraries = ['places'];

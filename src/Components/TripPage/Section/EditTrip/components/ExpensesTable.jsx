@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  TableContainer,
-  Table,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
-} from '@chakra-ui/react';
+import { Tr, Tbody, Td } from '@chakra-ui/react';
 
 export default function ExpensesTable({ index, category, amount }) {
   return (

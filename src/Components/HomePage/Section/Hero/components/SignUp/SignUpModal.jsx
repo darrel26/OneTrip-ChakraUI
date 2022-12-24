@@ -16,7 +16,7 @@ import {
 import SignUpForm from './SignUpForm';
 import OneTripLogo from '../../../../../../assets/HomePage/Logo.svg';
 
-export default function SignUpModal({isOpen, onClose}) {
+export default function SignUpModal({ isOpen, onClose }) {
   return (
     <Modal
       isOpen={isOpen}

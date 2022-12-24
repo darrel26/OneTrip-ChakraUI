@@ -1,5 +1,12 @@
 import React from 'react';
-import { Container, Flex, HStack, VStack, IconButton, Link } from '@chakra-ui/react';
+import {
+  Container,
+  Flex,
+  HStack,
+  VStack,
+  IconButton,
+  Link,
+} from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import HeroDescription from './components/HeroDescription';
 import HeroTitle from './components/HeroTitle';
@@ -7,7 +14,6 @@ import InputDate from './components/InputDate';
 import InputLocation from './components/InputLocation';
 import Navbar from './components/Navbar';
 import HeroBg from '../../../../assets/HomePage/hero-section-bg.svg';
-
 
 export default function HomePage() {
   return (
@@ -44,7 +50,9 @@ export default function HomePage() {
               <InputLocation />
               <InputDate />
               <InputDate />
-              <Link href="/trip"><IconButton Link colorScheme="teal" p={8} icon={<AddIcon />} /></Link>
+              <Link href="/trip">
+                <IconButton Link colorScheme="teal" p={8} icon={<AddIcon />} />
+              </Link>
             </HStack>
           </VStack>
         </VStack>

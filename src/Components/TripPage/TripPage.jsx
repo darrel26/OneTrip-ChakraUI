@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useJsApiLoader, GoogleMap, MarkerF } from '@react-google-maps/api';
 import { Container, HStack } from '@chakra-ui/react';
 import EditTripSection from './Section/EditTrip/EditTripSection';
+import { useSelector, useDispatch } from 'react-redux';
 
 let libraries = ['places'];
 let placeServices;

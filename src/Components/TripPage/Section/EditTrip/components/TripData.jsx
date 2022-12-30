@@ -6,6 +6,7 @@ import {
   Icon,
   Text,
   Accordion,
+  Button,
 } from '@chakra-ui/react';
 import { CalendarIcon } from '@chakra-ui/icons';
 import PlaceToVisit from './PlaceToVisit';
@@ -37,9 +38,10 @@ export default function TripData({
       py="2%"
       spacing={6}
     >
-      <Heading fontWeight="medium" pt={8}>
-        Trip to Brazil
-      </Heading>
+      <HStack width="full" pt={8} justify="space-between">
+        <Heading fontWeight="medium">Trip to Brazil</Heading>
+        <Button colorScheme="red">Save Trip</Button>
+      </HStack>
       <HStack>
         <Icon as={CalendarIcon}></Icon>
         <Text>11/25 - 11/30</Text>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { InputGroup, Input } from '@chakra-ui/react';
 
-export default function InputDate() {
+export default function InputDate({dateRef,_onChangeFunction}) {
   return (
     <InputGroup
       w="80%"
@@ -15,6 +15,9 @@ export default function InputDate() {
       }}
     >
       <Input
+        
+        onChange={_onChangeFunction}
+        ref={dateRef}
         type="date"
         colorScheme="teal"
         placeholder="City, Destination"

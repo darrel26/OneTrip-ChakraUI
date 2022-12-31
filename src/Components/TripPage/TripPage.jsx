@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useJsApiLoader, GoogleMap, MarkerF } from '@react-google-maps/api';
 import { Container, HStack } from '@chakra-ui/react';
 import EditTripSection from './Section/EditTrip/EditTripSection';
+import { useSelector, useDispatch } from 'react-redux';
 
 let libraries = ['places'];
 let placeServices;
@@ -14,6 +15,7 @@ const center = {
 export default function TripPage() {
   const [recommendation, setRecommendation] = useState([]);
   const [placeData, setPlaceData] = useState([]);
+  const dispatch = useDispatch()
 
   const addPlaces = (placeDetail) => {
     if (placeData.length !== 0) {
@@ -22,11 +24,6 @@ export default function TripPage() {
       setPlaceData([placeDetail]);
     }
   };
-
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: 'AIzaSyBuDXGh0iay6VVMlb3X7Odap7W3mS8ZZiE',
-    libraries,
-  });
 
   const getRecommendation = (geometry) => {
     const request = {
@@ -82,7 +79,6 @@ export default function TripPage() {
 
   return (
     <Container maxW="100vw" p={0}>
-      {isLoaded ? (
         <HStack p={0} spacing={0}>
           <EditTripSection
             center={center}
@@ -114,9 +110,6 @@ export default function TripPage() {
             ))}
           </GoogleMap>
         </HStack>
-      ) : (
-        console.log(`ERROR TO LOAD GOOGLE MAP API ${loadError}`)
-      )}
     </Container>
   );
 }

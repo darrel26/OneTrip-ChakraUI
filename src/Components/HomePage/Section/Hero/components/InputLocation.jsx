@@ -1,11 +1,12 @@
 import React from 'react';
 import { InputGroup, Input, InputLeftElement } from '@chakra-ui/react';
 import { LocationIcon } from '../../../../../assets/Icons/icons';
+import { Autocomplete } from '@react-google-maps/api';
 
-export default function InputLocation() {
+export default function InputLocation({locationRef,_onChangeFunction}) {
   return (
     <InputGroup
-      w="125%"
+      w="full"
       h="85%"
       ml={4}
       _after={{
@@ -18,14 +19,21 @@ export default function InputLocation() {
       <InputLeftElement
         h="full"
         pointerEvents="none"
-        children={<LocationIcon />}
+        children={<LocationIcon color="red"/>}
       />
-      <Input
+      <Autocomplete
+       
+
+      >
+        <Input
+        ref={locationRef}
+        onChange={_onChangeFunction}
         placeholder="City, Destination"
         h="full"
         border="none"
         _focus={{ outline: 'none', boxShadow: 'none' }}
       />
+      </Autocomplete>
     </InputGroup>
   );
 }

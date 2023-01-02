@@ -7,15 +7,20 @@ import { useSelector, useDispatch } from 'react-redux';
 let libraries = ['places'];
 let placeServices;
 
-const center = {
-  lat: -6.914864,
-  lng: 107.608238,
-};
+
 
 export default function TripPage() {
   const [recommendation, setRecommendation] = useState([]);
   const [placeData, setPlaceData] = useState([]);
+  const generateAuto = useSelector((state) => state.trip.recommendationRestriction)
+  const getLocationDetail = useSelector((state) => state.trip.location)
   const dispatch = useDispatch()
+  console.log(getLocationDetail);
+
+  const center = {
+  lat: getLocationDetail.geometry.location.lat(),
+  lng: getLocationDetail.geometry.location.lng(),
+};
 
   const addPlaces = (placeDetail) => {
     if (placeData.length !== 0) {
@@ -29,7 +34,7 @@ export default function TripPage() {
     const request = {
       location: geometry,
       radius: '500',
-      type: ['restaurant'],
+      type: generateAuto,
     };
     placeServices.nearbySearch(request, (response) => {
       setRecommendation(response.slice(0, 5));

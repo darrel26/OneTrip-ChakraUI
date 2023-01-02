@@ -18,6 +18,8 @@ import {
 export default function HomePage() {
   const dispatch = useDispatch();
   const [isDisable, setDisable] = useState('#');
+  const [autocomplete, setAutocomplete] = useState();
+  const [placeDetail, setPlaceDetail] = useState();
   const originsDate = useRef();
   const destinationDate = useRef();
   const location = useRef();
@@ -40,7 +42,7 @@ export default function HomePage() {
   const storeToRedux = () => {
     dispatch(storeOriginsDate(originsDate.current.value));
     dispatch(storeDestinationDate(destinationDate.current.value));
-    dispatch(storeLocation(location.current.value));
+    dispatch(storeLocation(placeDetail));
   };
 
   console.log('Origins Date: ', getOriginsDate);
@@ -81,6 +83,8 @@ export default function HomePage() {
               <InputLocation
                 locationRef={location}
                 _onChangeFunction={allowAddTrip}
+                setAuto={setAutocomplete}
+                placeDetail={() => setPlaceDetail(autocomplete.getPlace())}
               />
               <InputDate
                 dateRef={originsDate}

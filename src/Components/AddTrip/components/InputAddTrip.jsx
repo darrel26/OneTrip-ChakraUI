@@ -26,7 +26,7 @@ const InputAddTrip = () => {
             pointerEvents="none"
             children={<LocationIcon />}
           />
-           <Input value={location} type="text"/>
+           <Input value={location.name} type="text"/>
         </InputGroup>
         <InputGroup>
             <Input value={originsDate} type="date"/>

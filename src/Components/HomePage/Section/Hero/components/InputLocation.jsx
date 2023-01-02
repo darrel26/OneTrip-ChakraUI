@@ -1,11 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { InputGroup, Input, InputLeftElement } from '@chakra-ui/react';
 import { LocationIcon } from '../../../../../assets/Icons/icons';
 import { Autocomplete } from '@react-google-maps/api';
 
-export default function InputLocation({ locationRef, _onChangeFunction }) {
+export default function InputLocation({ placeDetail, locationRef, _onChangeFunction, setAuto }) {
+  
   return (
     <Autocomplete
+      onLoad={(auto)=>setAuto(auto)}
+      onPlaceChanged={() => placeDetail()}
+      ref={locationRef}
       className="autocomplete home"
       styles={{
         width: '100%',
@@ -27,7 +31,6 @@ export default function InputLocation({ locationRef, _onChangeFunction }) {
           children={<LocationIcon color="red" />}
         />
         <Input
-          ref={locationRef}
           onChange={_onChangeFunction}
           placeholder="City, Destination"
           h="full"

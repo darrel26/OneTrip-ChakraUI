@@ -4,7 +4,8 @@ const initialState = {
   location : "",
   originsDate : "",
   destinationDate: "",
-  mapsLibraries: ['places']
+  mapsLibraries: ['places'],
+  recommendationRestriction : null
 }
 
 export const tripSlice = createSlice({

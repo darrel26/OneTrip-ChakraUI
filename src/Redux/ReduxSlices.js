@@ -5,7 +5,7 @@ const initialState = {
   originsDate : "",
   destinationDate: "",
   mapsLibraries: ['places'],
-  recommendationRestriction : null
+  recommendationRestriction : ""
 }
 
 export const tripSlice = createSlice({
@@ -21,10 +21,13 @@ export const tripSlice = createSlice({
      storeLocation: (state, action) => {
       state.location = action.payload
     },
+    storeRecommendation : (state, action) =>{
+      state.recommendationRestriction = action.payload
+    }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { storeDestinationDate, storeLocation, storeOriginsDate } = tripSlice.actions
+export const { storeDestinationDate, storeLocation, storeOriginsDate, storeRecommendation } = tripSlice.actions
 
 export default tripSlice.reducer

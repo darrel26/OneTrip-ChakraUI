@@ -15,7 +15,7 @@ export default function TripPage() {
   const generateAuto = useSelector((state) => state.trip.recommendationRestriction)
   const getLocationDetail = useSelector((state) => state.trip.location)
   const dispatch = useDispatch()
-  console.log(getLocationDetail);
+  console.log(generateAuto);
 
   const center = {
   lat: getLocationDetail.geometry.location.lat(),
@@ -34,7 +34,7 @@ export default function TripPage() {
     const request = {
       location: geometry,
       radius: '500',
-      type: generateAuto,
+      type: 'museum',
     };
     placeServices.nearbySearch(request, (response) => {
       setRecommendation(response.slice(0, 5));
@@ -44,6 +44,19 @@ export default function TripPage() {
 
   const onLoad = (map) => {
     placeServices = new google.maps.places.PlacesService(map);
+    if (generateAuto === "") {
+      return
+    }else{
+      const request = {
+      location: center,
+      radius: '600',
+      type: generateAuto,
+    };
+    placeServices.nearbySearch(request, (response) => {
+      setPlaceData(response.slice(0, 5));
+      console.log(response.slice(0, 5));
+    });
+    }
   };
 
   useEffect(() => {
@@ -54,6 +67,8 @@ export default function TripPage() {
       });
     }
   }, [placeData]);
+
+  
 
   /* BUDGETTING */
 
@@ -104,6 +119,9 @@ export default function TripPage() {
             center={center}
             onLoad={(map) => onLoad(map)}
           >
+            <MarkerF
+              position={center}
+            />
             {placeData.map((item, index) => (
               <MarkerF
                 key={index}

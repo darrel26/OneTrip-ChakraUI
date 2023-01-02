@@ -35,7 +35,7 @@ const InputAddTrip = () => {
           pointerEvents="none"
           children={<LocationIcon />}
         />
-        <Input value={location} type="text" />
+        <Input value={location.name} type="text" />
       </InputGroup>
       <HStack spacing={1} w="full">
         <Input value={originsDate} type="date" />

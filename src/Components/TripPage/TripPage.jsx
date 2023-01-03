@@ -84,6 +84,7 @@ export default function TripPage() {
         lng: placeData[placeData.length - 1].geometry.location.lng(),
       });
     }
+    console.log('PLACE DATA', placeData);
   }, [placeData]);
 
   /* BUDGETTING */
@@ -151,7 +152,6 @@ export default function TripPage() {
           center={center}
           onLoad={(map) => onLoad(map)}
         >
-          <MarkerF position={center} />
           {placeData.map((item, index) => (
             <MarkerF
               key={index}

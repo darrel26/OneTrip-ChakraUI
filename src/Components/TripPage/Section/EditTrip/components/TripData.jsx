@@ -11,6 +11,7 @@ import {
 import { CalendarIcon } from '@chakra-ui/icons';
 import PlaceToVisit from './PlaceToVisit';
 import Budgetting from './Budgetting';
+import { useSelector } from 'react-redux';
 
 export default function TripData({
   center,
@@ -22,6 +23,9 @@ export default function TripData({
   addBudget,
   addExpenses,
 }) {
+  const getPlaceDataInit = useSelector((state) => state.trip.location)
+  const getOriginDate = useSelector((state) => state.trip.originsDate)
+  const getDestDate = useSelector((state) => state.trip.destinationDate)
   return (
     <VStack
       css={{
@@ -39,12 +43,12 @@ export default function TripData({
       spacing={6}
     >
       <HStack width="full" pt={8} justify="space-between">
-        <Heading fontWeight="medium">Trip to Brazil</Heading>
+        <Heading fontWeight="medium">Trip to {getPlaceDataInit.name}</Heading>
         <Button colorScheme="red">Save Trip</Button>
       </HStack>
       <HStack>
         <Icon as={CalendarIcon}></Icon>
-        <Text>11/25 - 11/30</Text>
+        <Text>{getOriginDate} | {getDestDate}</Text>
       </HStack>
 
       <Accordion w="full" defaultIndex={[0]} allowMultiple py={10}>

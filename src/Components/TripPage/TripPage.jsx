@@ -2,18 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { useJsApiLoader, GoogleMap, MarkerF } from '@react-google-maps/api';
 import { Container, HStack } from '@chakra-ui/react';
 import EditTripSection from './Section/EditTrip/EditTripSection';
+import { useSelector, useDispatch } from 'react-redux';
 
 let libraries = ['places'];
 let placeServices;
 
-const center = {
-  lat: -6.914864,
-  lng: 107.608238,
-};
+
 
 export default function TripPage() {
   const [recommendation, setRecommendation] = useState([]);
   const [placeData, setPlaceData] = useState([]);
+  const generateAuto = useSelector((state) => state.trip.recommendationRestriction)
+  const getLocationDetail = useSelector((state) => state.trip.location)
+  const dispatch = useDispatch()
+  console.log(generateAuto);
+
+  const center = {
+  lat: getLocationDetail.geometry.location.lat(),
+  lng: getLocationDetail.geometry.location.lng(),
+};
 
   const addPlaces = (placeDetail) => {
     if (placeData.length !== 0) {
@@ -23,16 +30,11 @@ export default function TripPage() {
     }
   };
 
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: 'AIzaSyBuDXGh0iay6VVMlb3X7Odap7W3mS8ZZiE',
-    libraries,
-  });
-
   const getRecommendation = (geometry) => {
     const request = {
       location: geometry,
       radius: '500',
-      type: ['restaurant'],
+      type: 'museum',
     };
     placeServices.nearbySearch(request, (response) => {
       setRecommendation(response.slice(0, 5));
@@ -42,6 +44,19 @@ export default function TripPage() {
 
   const onLoad = (map) => {
     placeServices = new google.maps.places.PlacesService(map);
+    if (generateAuto === "") {
+      return
+    }else{
+      const request = {
+      location: center,
+      radius: '600',
+      type: generateAuto,
+    };
+    placeServices.nearbySearch(request, (response) => {
+      setPlaceData(response.slice(0, 5));
+      console.log(response.slice(0, 5));
+    });
+    }
   };
 
   useEffect(() => {
@@ -52,6 +67,8 @@ export default function TripPage() {
       });
     }
   }, [placeData]);
+
+  
 
   /* BUDGETTING */
 
@@ -82,7 +99,6 @@ export default function TripPage() {
 
   return (
     <Container maxW="100vw" p={0}>
-      {isLoaded ? (
         <HStack p={0} spacing={0}>
           <EditTripSection
             center={center}
@@ -103,6 +119,9 @@ export default function TripPage() {
             center={center}
             onLoad={(map) => onLoad(map)}
           >
+            <MarkerF
+              position={center}
+            />
             {placeData.map((item, index) => (
               <MarkerF
                 key={index}
@@ -114,9 +133,6 @@ export default function TripPage() {
             ))}
           </GoogleMap>
         </HStack>
-      ) : (
-        console.log(`ERROR TO LOAD GOOGLE MAP API ${loadError}`)
-      )}
     </Container>
   );
 }

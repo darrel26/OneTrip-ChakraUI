@@ -12,6 +12,7 @@ import {
 import PlaceCard from './PlaceCard';
 import PlaceInput from './PlaceInput';
 import PlaceRecommendation from './PlaceRecommendation';
+import { useSelector } from 'react-redux';
 
 export default function PlaceToVisit({
   center,
@@ -20,6 +21,7 @@ export default function PlaceToVisit({
   recommendation,
   setRecommendation,
 }) {
+  const getMapsLoad = useSelector((state) => state.trip.maps)
   return (
     <AccordionItem>
       <h1>
@@ -33,9 +35,13 @@ export default function PlaceToVisit({
       <AccordionPanel pb={4}>
         <VStack alignItems="flex-start" spacing={4}>
           {placeData.map(
-            ({ place_id, photos, formatted_address, name, rating }, index) => {
+            ({ place_id, photos, formatted_address, name, rating, geometry, vicinity }, index) => {
               return (
                 <PlaceCard
+                  functionPass={() => getMapsLoad.panTo({
+                    lat: geometry.location.lat(),
+                    lng: geometry.location.lng()
+                  })}
                   key={place_id}
                   placeImg={
                     photos
@@ -43,7 +49,7 @@ export default function PlaceToVisit({
                       : 'https://via.placeholder.com/200'
                   }
                   index={index}
-                  placeAddress={formatted_address}
+                  placeAddress={formatted_address !== undefined ? formatted_address : vicinity}
                   placeName={name}
                   rating={rating}
                 />

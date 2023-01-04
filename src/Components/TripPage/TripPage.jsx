@@ -10,7 +10,7 @@ import EditTripSection from './Section/EditTrip/EditTripSection';
 import { useSelector, useDispatch } from 'react-redux';
 
 import generateTrip from '../../utils/generate';
-import { storeRecommendation } from '../../Redux/ReduxSlices';
+import { storeRecommendation, storeMapsLoad } from '../../Redux/ReduxSlices';
 
 let libraries = ['places'];
 let placeServices;
@@ -150,7 +150,10 @@ export default function TripPage() {
           }}
           zoom={14}
           center={center}
-          onLoad={(map) => onLoad(map)}
+          onLoad={(map) => {
+            onLoad(map);
+            dispatch(storeMapsLoad(map))
+          }}
         >
           {placeData.map((item, index) => (
             <MarkerF

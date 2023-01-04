@@ -7,6 +7,7 @@ const initialState = {
   mapsLibraries: ['places'],
   recommendationRestriction: '',
   placeData: [],
+  maps: null
 };
 
 export const tripSlice = createSlice({
@@ -28,6 +29,9 @@ export const tripSlice = createSlice({
     storePLaceData: (state, action) => {
       state.placeData = [...state.placeData, action.payload];
     },
+    storeMapsLoad: (state, action) => {
+      state.maps = action.payload;
+    },
   },
 });
 
@@ -38,6 +42,7 @@ export const {
   storeOriginsDate,
   storeRecommendation,
   storePLaceData,
+  storeMapsLoad
 } = tripSlice.actions;
 
 export default tripSlice.reducer;

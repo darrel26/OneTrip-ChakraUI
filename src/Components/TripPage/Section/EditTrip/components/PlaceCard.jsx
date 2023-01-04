@@ -15,9 +15,12 @@ export default function PlaceCard({
   placeAddress,
   placeName,
   rating,
+  functionPass,
 }) {
   return (
     <Card
+      onClick={()=>functionPass()}
+      cursor="pointer"
       maxW="100%"
       w="100%"
       h="200px"

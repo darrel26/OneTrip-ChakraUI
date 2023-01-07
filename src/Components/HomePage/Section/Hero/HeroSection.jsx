@@ -7,7 +7,7 @@ import HeroTitle from './components/HeroTitle';
 import InputDate from './components/InputDate';
 import InputLocation from './components/InputLocation';
 import Navbar from './components/Navbar';
-// import HeroBg from '../../../../assets/HomePage/hero-section-bg.svg';
+import HeroBg from '../../../../assets/HomePage/hero-section-bg.jpg';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   storeDestinationDate,
@@ -55,9 +55,9 @@ export default function HomePage() {
       display="flex"
       justifyContent="center"
       className="Hero-Container"
-      // backgroundImage={`url(${HeroBg})`}
-      // backgroundSize="cover"
-      // backgroundPosition="center"
+      backgroundImage={`url(${HeroBg})`}
+      backgroundSize="cover"
+      backgroundPosition="center"
     >
       <Flex h="100vh" w="container.xl">
         <VStack w="full" h="full">

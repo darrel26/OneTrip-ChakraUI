@@ -84,7 +84,6 @@ export default function TripPage() {
         lng: placeData[placeData.length - 1].geometry.location.lng(),
       });
     }
-    console.log('PLACE DATA', placeData);
   }, [placeData]);
 
   /* BUDGETTING */
@@ -117,7 +116,7 @@ export default function TripPage() {
   return (
     <Container maxW="100vw" p={0}>
       <HStack p={0} spacing={0}>
-        {generateAuto && (
+        {placeData.length === 0 && (
           <DistanceMatrixService
             options={{
               destinations: latLng,
@@ -129,7 +128,6 @@ export default function TripPage() {
                 .map((data) => data.elements)
                 .map((e) => e.map((data) => data.duration.value));
               setPlaceData(generateTrip(elements, nearby));
-              dispatch(storeRecommendation(null));
             }}
           />
         )}
@@ -152,7 +150,7 @@ export default function TripPage() {
           center={center}
           onLoad={(map) => {
             onLoad(map);
-            dispatch(storeMapsLoad(map))
+            dispatch(storeMapsLoad(map));
           }}
         >
           {placeData.map((item, index) => (

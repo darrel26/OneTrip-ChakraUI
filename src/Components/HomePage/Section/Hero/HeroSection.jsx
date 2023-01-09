@@ -7,7 +7,7 @@ import HeroTitle from './components/HeroTitle';
 import InputDate from './components/InputDate';
 import InputLocation from './components/InputLocation';
 import Navbar from './components/Navbar';
-import HeroBg from '../../../../assets/HomePage/hero-section-bg.svg';
+import HeroBg from '../../../../assets/HomePage/hero-section-bg.jpg';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   storeDestinationDate,

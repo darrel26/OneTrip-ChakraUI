@@ -14,11 +14,11 @@ const RecommendButton = () => {
   const dispatch = useDispatch()
   const getLoc = useSelector((state) => state.trip.location)
   const { isOpen:ismuseumOpen, onOpen: onmuseumOpen, onClose:onmuseumClose } = useDisclosure()
+  const { isOpen:isrestaurantOpen, onOpen: onrestaurantOpen, onClose:onrestaurantClose } = useDisclosure()
+  const { isOpen:istouristOpen, onOpen: ontouristOpen, onClose:ontouristClose } = useDisclosure()
   return (
     <HStack>
-        <Buttons onClickHandler={() =>{
-          onmuseumOpen()
-        }} title="🏦  MUSEUM"/>
+        <Buttons onClickHandler={onmuseumOpen} title="🏦  MUSEUM"/>
         <ModalConfirmation
           isOpen={ismuseumOpen}
           onClose={onmuseumClose}
@@ -27,8 +27,24 @@ const RecommendButton = () => {
           buttonTitle="Yes, I'm sure"
           buttonClick={()=>dispatch(storeRecommendation('museum'))}
         />
-        <Buttons title="🍴  RESTAURANT"/>
-        <Buttons title="🧺  TOURIST ATTRACT"/>
+        <Buttons onClickHandler={onrestaurantOpen} title="🍴  RESTAURANT"/>
+        <ModalConfirmation
+          isOpen={isrestaurantOpen}
+          onClose={onrestaurantClose}
+          title="Are you sure pick Restaurant?"
+          body="Trip will auto generate restaurant"
+          buttonTitle="Yes, I'm sure"
+          buttonClick={()=>dispatch(storeRecommendation('restaurant'))}
+        />
+        <Buttons onClickHandler={ontouristOpen} title="🧺  TOURIST ATTRACT"/>
+        <ModalConfirmation
+          isOpen={istouristOpen}
+          onClose={ontouristClose}
+          title="Are you sure pick Tourist Attraction?"
+          body="Trip will auto generate tourist attraction"
+          buttonTitle="Yes, I'm sure"
+          buttonClick={()=>dispatch(storeRecommendation('tourist_attraction'))}
+        />
     </HStack>
   )
 }

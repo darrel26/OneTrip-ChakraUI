@@ -1,26 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import { useJsApiLoader, GoogleMap, MarkerF } from '@react-google-maps/api';
+import {
+  useJsApiLoader,
+  GoogleMap,
+  MarkerF,
+  DistanceMatrixService,
+} from '@react-google-maps/api';
 import { Container, HStack } from '@chakra-ui/react';
 import EditTripSection from './Section/EditTrip/EditTripSection';
 import { useSelector, useDispatch } from 'react-redux';
 
+import generateTrip from '../../utils/generate';
+import { storeRecommendation, storeMapsLoad } from '../../Redux/ReduxSlices';
+
 let libraries = ['places'];
 let placeServices;
-
-
 
 export default function TripPage() {
   const [recommendation, setRecommendation] = useState([]);
   const [placeData, setPlaceData] = useState([]);
-  const generateAuto = useSelector((state) => state.trip.recommendationRestriction)
-  const getLocationDetail = useSelector((state) => state.trip.location)
-  const dispatch = useDispatch()
+  const [nearby, setNearby] = useState([]);
+
+  const generateAuto = useSelector(
+    (state) => state.trip.recommendationRestriction
+  );
+  const getLocationDetail = useSelector((state) => state.trip.location);
+  const dispatch = useDispatch();
   console.log(generateAuto);
 
   const center = {
-  lat: getLocationDetail.geometry.location.lat(),
-  lng: getLocationDetail.geometry.location.lng(),
-};
+    lat: getLocationDetail.geometry.location.lat(),
+    lng: getLocationDetail.geometry.location.lng(),
+  };
+
+  const [latLng, setLatLng] = useState([center]);
 
   const addPlaces = (placeDetail) => {
     if (placeData.length !== 0) {
@@ -44,18 +56,24 @@ export default function TripPage() {
 
   const onLoad = (map) => {
     placeServices = new google.maps.places.PlacesService(map);
-    if (generateAuto === "") {
-      return
-    }else{
+    if (generateAuto === '') {
+      return;
+    } else {
       const request = {
-      location: center,
-      radius: '600',
-      type: generateAuto,
-    };
-    placeServices.nearbySearch(request, (response) => {
-      setPlaceData(response.slice(0, 5));
-      console.log(response.slice(0, 5));
-    });
+        location: center,
+        radius: '5000',
+        type: generateAuto,
+      };
+      placeServices.nearbySearch(request, (response) => {
+        const nearbyPlace = response.slice(0, 5);
+        const geometry = nearbyPlace.map(({ geometry }) => ({
+          lat: geometry.location.lat(),
+          lng: geometry.location.lng(),
+        }));
+        console.log('NEARBY TO CHECK : ', nearbyPlace);
+        setNearby(nearbyPlace);
+        setLatLng([...latLng, ...geometry]);
+      });
     }
   };
 
@@ -67,8 +85,6 @@ export default function TripPage() {
       });
     }
   }, [placeData]);
-
-  
 
   /* BUDGETTING */
 
@@ -99,40 +115,55 @@ export default function TripPage() {
 
   return (
     <Container maxW="100vw" p={0}>
-        <HStack p={0} spacing={0}>
-          <EditTripSection
-            center={center}
-            recommendation={recommendation}
-            setRecommendation={onLoad}
-            placeData={placeData}
-            addPlaces={addPlaces}
-            budgetting={budgetting}
-            addBudget={addBudget}
-            addExpenses={addExpenses}
-          />
-          <GoogleMap
-            mapContainerStyle={{
-              height: '100vh',
-              width: '60vw',
+      <HStack p={0} spacing={0}>
+        {placeData.length === 0 && (
+          <DistanceMatrixService
+            options={{
+              destinations: latLng,
+              origins: latLng,
+              travelMode: 'DRIVING',
             }}
-            zoom={14}
-            center={center}
-            onLoad={(map) => onLoad(map)}
-          >
+            callback={(response) => {
+              const elements = response.rows
+                .map((data) => data.elements)
+                .map((e) => e.map((data) => data.duration.value));
+              setPlaceData(generateTrip(elements, nearby));
+            }}
+          />
+        )}
+        <EditTripSection
+          center={center}
+          recommendation={recommendation}
+          setRecommendation={onLoad}
+          placeData={placeData}
+          addPlaces={addPlaces}
+          budgetting={budgetting}
+          addBudget={addBudget}
+          addExpenses={addExpenses}
+        />
+        <GoogleMap
+          mapContainerStyle={{
+            height: '100vh',
+            width: '60vw',
+          }}
+          zoom={14}
+          center={center}
+          onLoad={(map) => {
+            onLoad(map);
+            dispatch(storeMapsLoad(map));
+          }}
+        >
+          {placeData.map((item, index) => (
             <MarkerF
-              position={center}
+              key={index}
+              position={{
+                lat: item.geometry.location.lat(),
+                lng: item.geometry.location.lng(),
+              }}
             />
-            {placeData.map((item, index) => (
-              <MarkerF
-                key={index}
-                position={{
-                  lat: item.geometry.location.lat(),
-                  lng: item.geometry.location.lng(),
-                }}
-              />
-            ))}
-          </GoogleMap>
-        </HStack>
+          ))}
+        </GoogleMap>
+      </HStack>
     </Container>
   );
 }

@@ -4,8 +4,9 @@ import {
   GoogleMap,
   MarkerF,
   DistanceMatrixService,
+  DirectionsRenderer,
 } from '@react-google-maps/api';
-import { Container, HStack } from '@chakra-ui/react';
+import { Box, Button, Container, HStack } from '@chakra-ui/react';
 import EditTripSection from './Section/EditTrip/EditTripSection';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -14,11 +15,14 @@ import { storeRecommendation, storeMapsLoad } from '../../Redux/ReduxSlices';
 
 let libraries = ['places'];
 let placeServices;
+let directionService;
 
 export default function TripPage() {
   const [recommendation, setRecommendation] = useState([]);
   const [placeData, setPlaceData] = useState([]);
   const [nearby, setNearby] = useState([]);
+  const [route, setRoute] = useState(null)
+  const [showRoute, setShowRoute] = useState(false)
 
   const generateAuto = useSelector(
     (state) => state.trip.recommendationRestriction
@@ -54,7 +58,39 @@ export default function TripPage() {
     });
   };
 
+  const getRoute = async (mapOrigin, mapDestination) => {
+    let newWayPoint = [];
+    let waypoint = placeData.slice(1, placeData.length - 1)
+    waypoint.forEach(item => {
+        newWayPoint.push(
+            {
+              location:{
+                lat :item.geometry.location.lat(),
+                lng :item.geometry.location.lng()
+              },
+              stopover:true
+            }
+          )
+    })
+    console.log("new way point", newWayPoint);
+    const directionService = new google.maps.DirectionsService();
+    const result = await directionService.route({
+    origin: {
+      lat : placeData[0].geometry.location.lat(),
+      lng : placeData[0].geometry.location.lng()
+    },
+    destination: {
+      lat : placeData[placeData.length-1].geometry.location.lat(),
+      lng : placeData[placeData.length-1].geometry.location.lng()
+    },
+    waypoints: newWayPoint,
+    travelMode: google.maps.TravelMode.DRIVING,
+  });
+  setRoute(result)
+  }
+
   const onLoad = (map) => {
+    directionService= new google.maps.DirectionsService();
     placeServices = new google.maps.places.PlacesService(map);
     if (generateAuto === '') {
       return;
@@ -153,6 +189,31 @@ export default function TripPage() {
             dispatch(storeMapsLoad(map));
           }}
         >
+          <Box
+              marginTop="10px"
+              bgColor="white"
+              shadow="base"
+              width="100%"
+              zIndex="modal"
+              display="flex"
+              justifyContent="center"
+          >
+              <Button
+              onClick={getRoute}
+              zIndex="modal"
+              borderRadius="lg"
+              colorScheme="teal"
+              shadow="base"
+              width="200px"
+            >
+              Show Direction
+            </Button>
+          </Box>
+          {
+            route&&(
+              <DirectionsRenderer directions={route}/>
+            )
+          }
           {placeData.map((item, index) => (
             <MarkerF
               key={index}

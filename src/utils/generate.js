@@ -3,10 +3,14 @@ const generateTrip = (data, nearby) => {
 
   let nextIndex = 0;
   let path = [];
+  let cost = 3600;
   let prevIndex = 0;
   let temp;
 
-  for (let i = 0; i < graph.length - 1; i++) {
+  while (cost < 28800) {
+    if (path.length === nearby.length) {
+      break;
+    }
     let arrayToWatch = graph[nextIndex];
     // find minimum value from array
     let minValue = arrayToWatch
@@ -20,13 +24,18 @@ const generateTrip = (data, nearby) => {
     temp = nextIndex;
     prevIndex = temp;
     nextIndex = findNextIndex;
+    if (cost + 3600 + minValue > 28800) {
+      break;
+    }
 
+    cost = cost + 1800 + minValue;
     path.push(nearby[nextIndex - 1]);
 
     for (let j = 0; j < graph.length; j++) {
       graph[j][prevIndex] = 'visited';
     }
   }
+  console.log(cost);
   return path;
 };
 

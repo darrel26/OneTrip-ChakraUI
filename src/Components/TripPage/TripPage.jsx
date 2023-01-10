@@ -61,16 +61,15 @@ export default function TripPage() {
     } else {
       const request = {
         location: center,
-        radius: '5000',
+        radius: '10000',
         type: generateAuto,
       };
       placeServices.nearbySearch(request, (response) => {
-        const nearbyPlace = response.slice(0, 5);
+        const nearbyPlace = response.slice(0, 9);
         const geometry = nearbyPlace.map(({ geometry }) => ({
           lat: geometry.location.lat(),
           lng: geometry.location.lng(),
         }));
-        console.log('NEARBY TO CHECK : ', nearbyPlace);
         setNearby(nearbyPlace);
         setLatLng([...latLng, ...geometry]);
       });
@@ -116,7 +115,7 @@ export default function TripPage() {
   return (
     <Container maxW="100vw" p={0}>
       <HStack p={0} spacing={0}>
-        {placeData.length === 0 && (
+        {generateAuto !== null && (
           <DistanceMatrixService
             options={{
               destinations: latLng,
@@ -128,6 +127,7 @@ export default function TripPage() {
                 .map((data) => data.elements)
                 .map((e) => e.map((data) => data.duration.value));
               setPlaceData(generateTrip(elements, nearby));
+              dispatch(storeRecommendation(null));
             }}
           />
         )}

@@ -39,7 +39,7 @@ export const tripSlice = createSlice({
     },
     storeTimePlace: (state, action) => {
       state.placeTime = action.payload * 3600;
-      state.destinationDate = action.payload + " Hours";
+      state.destinationDate = action.payload + " Hour(s)";
     }
   },
 });

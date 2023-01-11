@@ -69,7 +69,7 @@ export default function PlaceToVisit({
             overflowY="hidden"
           >
             {recommendation.map((item, index) => (
-              <PlaceRecommendation item={item} key={index} />
+              <PlaceRecommendation item={item} key={index} onClick={()=> addPlaces(item)}/>
             ))}
           </Grid>
         </VStack>

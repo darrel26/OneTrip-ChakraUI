@@ -55,7 +55,7 @@ export default function TripPage() {
   const getRecommendation = (geometry) => {
     const request = {
       location: geometry,
-      radius: '500',
+      radius: '1000',
       type: ['amusement_park', 'bakery', 'bar', 'bowling_alley', 'cafe'],
     };
     placeServices.nearbySearch(request, (response) => {

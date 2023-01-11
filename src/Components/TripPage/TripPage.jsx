@@ -51,8 +51,8 @@ export default function TripPage() {
   const getRecommendation = (geometry) => {
     const request = {
       location: geometry,
-      radius: '500',
-      type: 'museum',
+      radius: '1000',
+      type: 'tourist_attraction',
     };
     placeServices.nearbySearch(request, (response) => {
       setRecommendation(response.slice(0, 5));

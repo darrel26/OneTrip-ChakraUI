@@ -1,16 +1,18 @@
 import React from 'react';
-import { Card, HStack, Image, CardBody, Text } from '@chakra-ui/react';
+import { Card, HStack, Image, CardBody, Text, Button } from '@chakra-ui/react';
 
-export default function PlaceRecommendation({ item }) {
+export default function PlaceRecommendation({ item, onClick }) {
   return (
     <Card
-      direction={{ base: 'column', sm: 'row' }}
+      display="flex"
       variant="outline"
-      maxW="250px"
-      maxH="75px"
+      maxW="300px"
+      w="auto"
+      maxH="100px"
     >
       <HStack>
         <Image
+          borderRadius="4px"
           src={
             item.photos
               ? item.photos[0].getUrl()
@@ -21,6 +23,7 @@ export default function PlaceRecommendation({ item }) {
         <CardBody w="70%">
           <Text fontWeight="medium">{item.name}</Text>
         </CardBody>
+        <Button onClick={() => onClick()} colorScheme="teal">+</Button>
       </HStack>
     </Card>
   );

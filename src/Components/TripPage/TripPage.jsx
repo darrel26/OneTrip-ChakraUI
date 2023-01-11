@@ -33,12 +33,16 @@ export default function TripPage() {
   const getLocationDetail = useSelector((state) => state.trip.location);
   const dispatch = useDispatch();
 
+  const basedPlaceId = {
+    placeId: getLocationDetail.place_id,
+  };
+
   const center = {
     lat: getLocationDetail.geometry.location.lat(),
     lng: getLocationDetail.geometry.location.lng(),
   };
 
-  const [latLng, setLatLng] = useState([center]);
+  const [placeId, setPlaceId] = useState([basedPlaceId]);
 
   const addPlaces = (placeDetail) => {
     if (placeData.length !== 0) {
@@ -52,7 +56,7 @@ export default function TripPage() {
     const request = {
       location: geometry,
       radius: '500',
-      type: 'museum',
+      type: ['amusement_park', 'bakery', 'bar', 'bowling_alley', 'cafe'],
     };
     placeServices.nearbySearch(request, (response) => {
       setRecommendation(response.slice(0, 5));
@@ -106,12 +110,11 @@ export default function TripPage() {
       };
       placeServices.nearbySearch(request, (response) => {
         const nearbyPlace = response.slice(0, 8);
-        const geometry = nearbyPlace.map(({ geometry }) => ({
-          lat: geometry.location.lat(),
-          lng: geometry.location.lng(),
+        const nearbyPlaceId = nearbyPlace.map(({ place_id }) => ({
+          placeId: place_id,
         }));
         setNearby(nearbyPlace);
-        setLatLng([...latLng, ...geometry]);
+        setPlaceId([...placeId, ...nearbyPlaceId]);
       });
     }
   };
@@ -155,21 +158,30 @@ export default function TripPage() {
   return (
     <Container maxW="100vw" p={0}>
       <HStack p={0} spacing={0}>
-        {generateAuto !== null && (
-          <DistanceMatrixService
-            options={{
-              destinations: latLng,
-              origins: latLng,
-              travelMode: 'DRIVING',
-            }}
-            callback={(response) => {
-              const elements = response.rows
-                .map((data) => data.elements)
-                .map((e) => e.map((data) => data.duration.value));
-              setPlaceData(generateTrip(elements, nearby, placeTime, tripTime));
-              dispatch(storeRecommendation(null));
-            }}
-          />
+        {generateAuto !== null ? (
+          nearby.length > 0 ? (
+            <DistanceMatrixService
+              options={{
+                destinations: placeId,
+                origins: placeId,
+                travelMode: 'DRIVING',
+              }}
+              callback={(response) => {
+                console.log(response);
+                const elements = response.rows
+                  .map((data) => data.elements)
+                  .map((e) => e.map((data) => data.duration.value));
+                setPlaceData(
+                  generateTrip(elements, nearby, placeTime, tripTime)
+                );
+                dispatch(storeRecommendation(null));
+              }}
+            />
+          ) : (
+            ''
+          )
+        ) : (
+          ''
         )}
         <EditTripSection
           center={center}

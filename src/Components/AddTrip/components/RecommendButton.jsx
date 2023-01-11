@@ -56,7 +56,7 @@ const RecommendButton = () => {
           title="Are you sure pick Restaurant?"
           body="Trip will auto generate restaurant from destination you choose before"
           buttonTitle="Yes, I'm sure"
-          buttonClick={()=>dispatch(storeRecommendation('restaurant'))}
+          buttonClick={()=>dispatcher('restaurant')}
           journey={journey}
           place={place}
           setJourney= {setJourney}
@@ -69,7 +69,7 @@ const RecommendButton = () => {
           title="Are you sure pick Tourist Attraction?"
           body="Trip will auto generate tourist attraction from destination you choose before"
           buttonTitle="Yes, I'm sure"
-          buttonClick={()=>dispatch(storeRecommendation('tourist_attraction'))}
+          buttonClick={()=>dispatcher('tourist_attraction')}
           journey={journey}
           place={place}
           setJourney= {setJourney}

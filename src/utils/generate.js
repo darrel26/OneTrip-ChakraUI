@@ -1,9 +1,9 @@
-const generateTrip = (data, nearby) => {
+const generateTrip = (data, nearby, placeCost, tripCost) => {
   let graph = data;
 
   let nextIndex = 0;
   let path = [];
-  let cost = 3600;
+  let cost = placeCost;
   let prevIndex = 0;
   let temp;
 
@@ -24,18 +24,17 @@ const generateTrip = (data, nearby) => {
     temp = nextIndex;
     prevIndex = temp;
     nextIndex = findNextIndex;
-    if (cost + 3600 + minValue > 28800) {
+    if (cost + placeCost + minValue > tripCost) {
       break;
     }
 
-    cost = cost + 1800 + minValue;
+    cost = cost + placeCost + minValue;
     path.push(nearby[nextIndex - 1]);
 
     for (let j = 0; j < graph.length; j++) {
       graph[j][prevIndex] = 'visited';
     }
   }
-  console.log(cost);
   return path;
 };
 

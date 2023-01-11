@@ -23,13 +23,15 @@ export default function TripPage() {
   const [nearby, setNearby] = useState([]);
   const [route, setRoute] = useState(null)
   const [showRoute, setShowRoute] = useState(false)
+  const [markerVisible, setMarkerVisible] = useState(true)
+  const tripTime = useSelector((state) => state.trip.journeyTime);
+  const placeTime = useSelector((state) => state.trip.placeTime);
 
   const generateAuto = useSelector(
     (state) => state.trip.recommendationRestriction
   );
   const getLocationDetail = useSelector((state) => state.trip.location);
   const dispatch = useDispatch();
-  console.log(generateAuto);
 
   const center = {
     lat: getLocationDetail.geometry.location.lat(),
@@ -54,7 +56,6 @@ export default function TripPage() {
     };
     placeServices.nearbySearch(request, (response) => {
       setRecommendation(response.slice(0, 5));
-      console.log(response.slice(0, 5));
     });
   };
 
@@ -72,7 +73,6 @@ export default function TripPage() {
             }
           )
     })
-    console.log("new way point", newWayPoint);
     const directionService = new google.maps.DirectionsService();
     const result = await directionService.route({
     origin: {
@@ -87,6 +87,12 @@ export default function TripPage() {
     travelMode: google.maps.TravelMode.DRIVING,
   });
   setRoute(result)
+  setMarkerVisible(false)
+  }
+
+  const clearRoute = () => {
+    setRoute(null)
+    setMarkerVisible(true)
   }
 
   const onLoad = (map) => {
@@ -97,11 +103,11 @@ export default function TripPage() {
     } else {
       const request = {
         location: center,
-        radius: '10000',
+        radius: '20000',
         type: generateAuto,
       };
       placeServices.nearbySearch(request, (response) => {
-        const nearbyPlace = response.slice(0, 9);
+        const nearbyPlace = response.slice(0, 8);
         const geometry = nearbyPlace.map(({ geometry }) => ({
           lat: geometry.location.lat(),
           lng: geometry.location.lng(),
@@ -162,7 +168,7 @@ export default function TripPage() {
               const elements = response.rows
                 .map((data) => data.elements)
                 .map((e) => e.map((data) => data.duration.value));
-              setPlaceData(generateTrip(elements, nearby));
+              setPlaceData(generateTrip(elements, nearby, placeTime, tripTime));
               dispatch(storeRecommendation(null));
             }}
           />
@@ -199,14 +205,14 @@ export default function TripPage() {
               justifyContent="center"
           >
               <Button
-              onClick={getRoute}
+              onClick={markerVisible === false ? clearRoute : getRoute}
               zIndex="modal"
               borderRadius="lg"
               colorScheme="teal"
               shadow="base"
               width="200px"
             >
-              Show Direction
+              {markerVisible === false ? 'Hide Route' : 'Show Route'}
             </Button>
           </Box>
           {
@@ -216,6 +222,7 @@ export default function TripPage() {
           }
           {placeData.map((item, index) => (
             <MarkerF
+              visible={markerVisible}
               key={index}
               position={{
                 lat: item.geometry.location.lat(),

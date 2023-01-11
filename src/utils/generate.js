@@ -3,11 +3,11 @@ const generateTrip = (data, nearby, placeCost, tripCost) => {
 
   let nextIndex = 0;
   let path = [];
-  let cost = placeCost;
+  let cost = 0;
   let prevIndex = 0;
   let temp;
 
-  while (cost < 28800) {
+  while (cost < tripCost) {
     if (path.length === nearby.length) {
       break;
     }
@@ -24,11 +24,13 @@ const generateTrip = (data, nearby, placeCost, tripCost) => {
     temp = nextIndex;
     prevIndex = temp;
     nextIndex = findNextIndex;
+    console.log('CURRENT COST : ', cost);
     if (cost + placeCost + minValue > tripCost) {
       break;
     }
 
     cost = cost + placeCost + minValue;
+    console.log('NEW COST : ', cost);
     path.push(nearby[nextIndex - 1]);
 
     for (let j = 0; j < graph.length; j++) {

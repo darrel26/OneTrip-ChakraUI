@@ -1,4 +1,4 @@
-import { Container, Heading, VStack, Button } from '@chakra-ui/react';
+import { Container, Heading, HStack, Button, Divider, VStack, Text } from '@chakra-ui/react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../HomePage/Section/Hero/components/Navbar';
@@ -8,6 +8,7 @@ import RecommendButton from './components/RecommendButton';
 const AddTrip = () => {
   return (
     <Container
+      w="100vw"
       maxW="container.xl"
       display="flex"
       justifyContent="center"
@@ -29,6 +30,7 @@ const AddTrip = () => {
             Create
           </Button>
           </Link>
+            <Divider/>
           <RecommendButton />
         </VStack>
       </VStack>

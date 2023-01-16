@@ -21,7 +21,7 @@ export default function PlaceToVisit({
   recommendation,
   setRecommendation,
 }) {
-  const getMapsLoad = useSelector((state) => state.trip.maps)
+  const getMapsLoad = useSelector((state) => state.trip.maps);
   return (
     <AccordionItem>
       <h1>
@@ -35,13 +35,26 @@ export default function PlaceToVisit({
       <AccordionPanel pb={4}>
         <VStack alignItems="flex-start" spacing={4}>
           {placeData.map(
-            ({ place_id, photos, formatted_address, name, rating, geometry, vicinity }, index) => {
+            (
+              {
+                place_id,
+                photos,
+                formatted_address,
+                name,
+                rating,
+                geometry,
+                vicinity,
+              },
+              index
+            ) => {
               return (
                 <PlaceCard
-                  functionPass={() => getMapsLoad.panTo({
-                    lat: geometry.location.lat(),
-                    lng: geometry.location.lng()
-                  })}
+                  functionPass={() =>
+                    getMapsLoad.panTo({
+                      lat: geometry.location.lat(),
+                      lng: geometry.location.lng(),
+                    })
+                  }
                   key={place_id}
                   placeImg={
                     photos
@@ -49,7 +62,11 @@ export default function PlaceToVisit({
                       : 'https://via.placeholder.com/200'
                   }
                   index={index}
-                  placeAddress={formatted_address !== undefined ? formatted_address : vicinity}
+                  placeAddress={
+                    formatted_address !== undefined
+                      ? formatted_address
+                      : vicinity
+                  }
                   placeName={name}
                   rating={rating}
                 />
@@ -62,14 +79,18 @@ export default function PlaceToVisit({
             addPlaces={addPlaces}
           />
           <Grid
-            autoFlow="column"
-            autoColumns="45%"
+            autoFlow="row"
             gridGap="4"
             overflowX="auto"
             overflowY="hidden"
+            w="full"
           >
             {recommendation.map((item, index) => (
-              <PlaceRecommendation item={item} key={index} onClick={()=> addPlaces(item)}/>
+              <PlaceRecommendation
+                item={item}
+                key={index}
+                onClick={() => addPlaces(item)}
+              />
             ))}
           </Grid>
         </VStack>

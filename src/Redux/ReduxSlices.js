@@ -8,8 +8,8 @@ const initialState = {
   recommendationRestriction: '',
   placeData: [],
   maps: null,
-  journeyTime : 3600,
-  placeTime : 3600,
+  journeyTime: 3600,
+  placeTime: 3600,
 };
 
 export const tripSlice = createSlice({
@@ -36,11 +36,11 @@ export const tripSlice = createSlice({
     },
     storeTimeJourney: (state, action) => {
       state.journeyTime = action.payload * 3600;
+      state.destinationDate = action.payload + ' Hour(s)';
     },
     storeTimePlace: (state, action) => {
       state.placeTime = action.payload * 3600;
-      state.destinationDate = action.payload + " Hour(s)";
-    }
+    },
   },
 });
 
@@ -53,7 +53,7 @@ export const {
   storePLaceData,
   storeMapsLoad,
   storeTimePlace,
-  storeTimeJourney
+  storeTimeJourney,
 } = tripSlice.actions;
 
 export default tripSlice.reducer;

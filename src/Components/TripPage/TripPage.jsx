@@ -55,11 +55,28 @@ export default function TripPage() {
   const getRecommendation = (geometry) => {
     const request = {
       location: geometry,
-      radius: '500',
-      type: ['amusement_park', 'bakery', 'bar', 'bowling_alley', 'cafe'],
+      radius: '1000',
+      type: [
+        'amusement_park',
+        'bakery',
+        'bar',
+        'bowling_alley',
+        'cafe',
+        'shopping_mall',
+        'stadium',
+        'spa',
+        'zoo',
+        'movie_theater',
+        'mosque',
+        'church',
+        'restaurant',
+      ],
     };
     placeServices.nearbySearch(request, (response) => {
-      setRecommendation(response.slice(0, 5));
+      const filteredPlace = response.filter(
+        (place) => place.rating !== undefined
+      );
+      setRecommendation(filteredPlace.slice(0, 5));
     });
   };
 

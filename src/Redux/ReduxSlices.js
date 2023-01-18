@@ -10,6 +10,7 @@ const initialState = {
   maps: null,
   journeyTime: 3600,
   placeTime: 3600,
+  loginStatus: false,
 };
 
 export const tripSlice = createSlice({
@@ -41,6 +42,9 @@ export const tripSlice = createSlice({
     storeTimePlace: (state, action) => {
       state.placeTime = action.payload * 3600;
     },
+    storeLoginStatus: (state, action) => {
+      state.loginStatus = action.payload;
+    },
   },
 });
 
@@ -54,6 +58,7 @@ export const {
   storeMapsLoad,
   storeTimePlace,
   storeTimeJourney,
+  storeLoginStatus,
 } = tripSlice.actions;
 
 export default tripSlice.reducer;

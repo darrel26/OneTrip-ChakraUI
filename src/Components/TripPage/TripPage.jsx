@@ -11,9 +11,8 @@ import EditTripSection from './Section/EditTrip/EditTripSection';
 import { useSelector, useDispatch } from 'react-redux';
 
 import generateTrip from '../../utils/generate';
-import { storeRecommendation, storeMapsLoad } from '../../Redux/ReduxSlices';
+import { storeMapsLoad } from '../../Redux/ReduxSlices';
 
-let libraries = ['places'];
 let placeServices;
 let directionService;
 
@@ -30,6 +29,7 @@ export default function TripPage() {
   const generateAuto = useSelector(
     (state) => state.trip.recommendationRestriction
   );
+
   const getLocationDetail = useSelector((state) => state.trip.location);
   const dispatch = useDispatch();
 

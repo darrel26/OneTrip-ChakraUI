@@ -123,7 +123,7 @@ export default function SignUpForm({ onClose }) {
             colorScheme="teal"
             mt={12}
             isLoading={isSubmitting}
-            loadingText="Submitting"
+            loadingText="Sign Up"
           >
             Sign Up
           </Button>

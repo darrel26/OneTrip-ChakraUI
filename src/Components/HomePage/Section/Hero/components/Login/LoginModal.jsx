@@ -48,13 +48,8 @@ export default function LoginModal({ isOpen, onClose }) {
         </VStack>
         <ModalCloseButton />
         <ModalBody>
-          <LoginForm />
+          <LoginForm onClose={onClose} />
         </ModalBody>
-        <ModalFooter>
-          <Button width="full" colorScheme="teal" mt={4}>
-            Sign in
-          </Button>
-        </ModalFooter>
       </ModalContent>
     </Modal>
   );

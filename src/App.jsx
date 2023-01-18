@@ -7,16 +7,15 @@ import TripPage from './Components/TripPage/TripPage';
 import { SkeletonCircle } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 
-
 export default function App() {
-  const lib = useSelector((state) => state.trip.mapsLibraries)
+  const lib = useSelector((state) => state.trip.mapsLibraries);
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: 'AIzaSyBuDXGh0iay6VVMlb3X7Odap7W3mS8ZZiE',
-    libraries: lib
+    googleMapsApiKey: 'AIzaSyALSzAz6giG2oFLX6vbTenuijWzk23i8DU',
+    libraries: lib,
   });
 
   if (!isLoaded) {
-    return <SkeletonCircle/>
+    return <SkeletonCircle />;
   }
 
   return (

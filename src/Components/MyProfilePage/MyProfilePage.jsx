@@ -27,15 +27,6 @@ export default function MyProfilePage() {
     getTripData();
   }, []);
 
-  const viewTrip = async (tripId) => {
-    const { data } = await axios.get(
-      `${import.meta.env.VITE_BASE_URL}/trip/${tripId}`,
-      { headers: { Authorization: `Bearer ${getCookie('token')}` } }
-    );
-
-    return data;
-  };
-
   return (
     <HStack w="100vw" h="100vh">
       <EditProfile
@@ -43,7 +34,7 @@ export default function MyProfilePage() {
         setToggleEditProfile={setToggleEditProfile}
         isOnEditProfile={isOnEditProfile}
       />
-      <TripCollection viewTrip={viewTrip} />
+      <TripCollection />
     </HStack>
   );
 }

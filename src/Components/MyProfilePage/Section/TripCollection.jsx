@@ -11,9 +11,11 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-export default function TripCollection({ viewTrip }) {
+export default function TripCollection() {
   const userTrip = useSelector((state) => state.trip.userTrip);
+  const navigate = useNavigate();
   return (
     <VStack
       w="50vw"
@@ -46,7 +48,7 @@ export default function TripCollection({ viewTrip }) {
                   <Button
                     onClick={async (e) => {
                       const tripId = e.target.parentElement.parentElement.id;
-                      await viewTrip(tripId);
+                      navigate(`/trip/${tripId}`);
                     }}
                   >
                     View Trip

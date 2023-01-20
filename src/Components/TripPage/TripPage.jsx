@@ -11,7 +11,7 @@ import EditTripSection from './Section/EditTrip/EditTripSection';
 import { useSelector, useDispatch } from 'react-redux';
 
 import generateTrip from '../../utils/generate';
-import { storeMapsLoad, storeRecommendation } from '../../Redux/ReduxSlices';
+import { storeMapsLoad, storeRecommendation, storePLaceData } from '../../Redux/ReduxSlices';
 import axios from 'axios';
 import { getCookie } from '../../utils/cookies';
 
@@ -46,13 +46,17 @@ export default function TripPage() {
   };
 
   const [placeId, setPlaceId] = useState([basedPlaceId]);
+  const dataStore = useSelector((state) => state.trip.placeData);
 
   const addPlaces = (placeDetail) => {
-    if (placeData.length !== 0) {
-      setPlaceData([...placeData, placeDetail]);
+    if (dataStore.length !== 0) {
+      dispatch(storePLaceData([...dataStore, placeDetail]));
+      // setPlaceData([...placeData, placeDetail]);
     } else {
-      setPlaceData([placeDetail]);
+      dispatch(storePLaceData([placeDetail]));
+      // setPlaceData([placeDetail]);
     }
+    console.log(dataStore);
   };
 
   const getRecommendation = (geometry) => {
@@ -85,7 +89,7 @@ export default function TripPage() {
 
   const getRoute = async (mapOrigin, mapDestination) => {
     let newWayPoint = [];
-    let waypoint = placeData.slice(1, placeData.length - 1);
+    let waypoint = dataStore.slice(1, dataStore.length - 1);
     waypoint.forEach((item) => {
       newWayPoint.push({
         location: {
@@ -98,12 +102,12 @@ export default function TripPage() {
     const directionService = new google.maps.DirectionsService();
     const result = await directionService.route({
       origin: {
-        lat: placeData[0].geometry.location.lat(),
-        lng: placeData[0].geometry.location.lng(),
+        lat: dataStore[0].geometry.location.lat(),
+        lng: dataStore[0].geometry.location.lng(),
       },
       destination: {
-        lat: placeData[placeData.length - 1].geometry.location.lat(),
-        lng: placeData[placeData.length - 1].geometry.location.lng(),
+        lat: dataStore[dataStore.length - 1].geometry.location.lat(),
+        lng: dataStore[dataStore.length - 1].geometry.location.lng(),
       },
       waypoints: newWayPoint,
       travelMode: google.maps.TravelMode.DRIVING,
@@ -140,13 +144,13 @@ export default function TripPage() {
   };
 
   useEffect(() => {
-    if (placeData.length > 0) {
+    if (dataStore.length > 0) {
       getRecommendation({
-        lat: placeData[placeData.length - 1].geometry.location.lat(),
-        lng: placeData[placeData.length - 1].geometry.location.lng(),
+        lat: dataStore[dataStore.length - 1].geometry.location.lat(),
+        lng: dataStore[dataStore.length - 1].geometry.location.lng(),
       });
     }
-  }, [placeData]);
+  }, [dataStore]);
 
   /* BUDGETTING */
 
@@ -189,7 +193,7 @@ export default function TripPage() {
         startDate: getStartDate,
         endDate: getEndDate,
       },
-      places: [...placeData],
+      places: [...dataStore],
       budget: budgetting.budget,
       expenses: budgetting.expenses,
     };
@@ -218,10 +222,8 @@ export default function TripPage() {
                 const elements = response.rows
                   .map((data) => data.elements)
                   .map((e) => e.map((data) => data.duration.value));
-                setPlaceData(
-                  generateTrip(elements, nearby, placeTime, tripTime)
-                );
-                dispatch(storeRecommendation(null));
+                  dispatch(storePLaceData(generateTrip(elements, nearby, placeTime, tripTime)));
+                  dispatch(storeRecommendation(null));
               }}
             />
           ) : (
@@ -234,7 +236,7 @@ export default function TripPage() {
           center={center}
           recommendation={recommendation}
           setRecommendation={onLoad}
-          placeData={placeData}
+          placeData={dataStore}
           addPlaces={addPlaces}
           budgetting={budgetting}
           addBudget={addBudget}
@@ -274,7 +276,7 @@ export default function TripPage() {
             </Button>
           </Box>
           {route && <DirectionsRenderer directions={route} />}
-          {placeData.map((item, index) => (
+          {dataStore.map((item, index) => (
             <MarkerF
               visible={markerVisible}
               key={index}

@@ -16,8 +16,6 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { EmailIcon, LockIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { storeLoginStatus } from '../../../../../../Redux/ReduxSlices';
-import { useDispatch } from 'react-redux/es/exports';
 
 export default function LoginForm({ onClose }) {
   const { isOpen, onToggle } = useDisclosure();
@@ -36,8 +34,6 @@ export default function LoginForm({ onClose }) {
       maxW: '100%',
     },
   });
-
-  const dispatch = useDispatch();
 
   const login = async () => {
     const userCredential = {
@@ -73,7 +69,7 @@ export default function LoginForm({ onClose }) {
                 description: `Welcome ${username}`,
                 status: 'success',
               });
-              dispatch(storeLoginStatus(true));
+              sessionStorage.setItem("loginStatus", true);
             }
           )
           .catch((error) => {

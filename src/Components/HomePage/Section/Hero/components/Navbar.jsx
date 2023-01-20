@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   HStack,
@@ -20,7 +20,6 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCookie, getUsernameUrl } from '../../../../../utils/cookies';
 import { SignOutIcon, ProfileIcon } from '../../../../../assets/Icons/icons';
-import { storeLoginStatus } from '../../../../../Redux/ReduxSlices';
 
 export default function Navbar() {
   const {
@@ -34,13 +33,10 @@ export default function Navbar() {
     onClose: onSignUpClose,
   } = useDisclosure();
 
-  const loginStatus = useSelector((state) => state.trip.loginStatus);
-  const dispatch = useDispatch();
-
   const signOut = () => {
-    dispatch(storeLoginStatus(false));
+    sessionStorage.removeItem('loginStatus');
+    window.location.reload(false);
   };
-
   return (
     <HStack w="full" justify="space-between" py={5}>
       <Image src={logo} />
@@ -51,7 +47,7 @@ export default function Navbar() {
           ))}
         </ButtonGroup>
       </HStack>
-      {loginStatus ? (
+      {sessionStorage.getItem("loginStatus") ? (
         <Menu placement="auto">
           <MenuButton colorScheme="pink">
             <Avatar

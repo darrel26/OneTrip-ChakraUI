@@ -21,12 +21,6 @@ const InputAddTrip = () => {
   const originsDate = useSelector((state) => state.trip.originsDate);
   const destinationDate = useSelector((state) => state.trip.destinationDate);
 
-  useEffect(() => {
-    console.log(location);
-    console.log(originsDate);
-    console.log(destinationDate);
-  }, []);
-
   return (
     <VStack w="40vw">
       <InputGroup>

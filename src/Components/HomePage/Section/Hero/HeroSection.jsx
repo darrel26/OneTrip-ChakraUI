@@ -45,10 +45,6 @@ export default function HomePage() {
     dispatch(storeLocation(placeDetail));
   };
 
-  console.log('Origins Date: ', getOriginsDate);
-  console.log('Destination Date: ', getDestinationDate);
-  console.log('Location: ', getLocation);
-
   return (
     <Container
       maxW="100vw"

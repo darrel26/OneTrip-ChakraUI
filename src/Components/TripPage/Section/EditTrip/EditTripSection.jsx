@@ -12,6 +12,7 @@ export default function EditTripSection({
   budgetting,
   addBudget,
   addExpenses,
+  saveTrip,
 }) {
   return (
     <Flex w="40vw">
@@ -25,6 +26,7 @@ export default function EditTripSection({
         budgetting={budgetting}
         addBudget={addBudget}
         addExpenses={addExpenses}
+        saveTrip={saveTrip}
       />
     </Flex>
   );

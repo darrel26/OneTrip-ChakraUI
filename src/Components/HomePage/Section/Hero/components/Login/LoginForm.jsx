@@ -59,19 +59,23 @@ export default function LoginForm({ onClose }) {
         e.preventDefault();
         setIsSubmitting(true);
         await login()
-          .then(({ username, userId, authToken, message }) => {
-            document.cookie = `userId=${userId}`;
-            document.cookie = `token=${authToken}`;
-            document.cookie = `username=${username}`;
-            setIsSubmitting(false);
-            onClose();
-            toast({
-              title: message,
-              description: `Welcome ${username}`,
-              status: 'success',
-            });
-            dispatch(storeLoginStatus(true));
-          })
+          .then(
+            ({ username, userId, email, createdAt, authToken, message }) => {
+              document.cookie = `userId=${userId}`;
+              document.cookie = `username=${username}`;
+              document.cookie = `email=${email}`;
+              document.cookie = `createdAt=${createdAt}`;
+              document.cookie = `token=${authToken}`;
+              setIsSubmitting(false);
+              onClose();
+              toast({
+                title: message,
+                description: `Welcome ${username}`,
+                status: 'success',
+              });
+              dispatch(storeLoginStatus(true));
+            }
+          )
           .catch((error) => {
             const { status, message } = error.response.data.error;
             setIsSubmitting(false);

@@ -22,10 +22,11 @@ export default function TripData({
   budgetting,
   addBudget,
   addExpenses,
+  saveTrip,
 }) {
-  const getPlaceDataInit = useSelector((state) => state.trip.location)
-  const getOriginDate = useSelector((state) => state.trip.originsDate)
-  const getDestDate = useSelector((state) => state.trip.destinationDate)
+  const getPlaceDataInit = useSelector((state) => state.trip.location);
+  const getOriginDate = useSelector((state) => state.trip.originsDate);
+  const getDestDate = useSelector((state) => state.trip.destinationDate);
   return (
     <VStack
       css={{
@@ -44,11 +45,15 @@ export default function TripData({
     >
       <HStack width="full" pt={8} justify="space-between">
         <Heading fontWeight="medium">Trip to {getPlaceDataInit.name}</Heading>
-        <Button colorScheme="red">Save Trip</Button>
+        <Button colorScheme="red" onClick={saveTrip}>
+          Save Trip
+        </Button>
       </HStack>
       <HStack>
         <Icon as={CalendarIcon}></Icon>
-        <Text>{getOriginDate} | {getDestDate}</Text>
+        <Text>
+          {getOriginDate} | {getDestDate}
+        </Text>
       </HStack>
 
       <Accordion w="full" defaultIndex={[0]} allowMultiple py={10}>

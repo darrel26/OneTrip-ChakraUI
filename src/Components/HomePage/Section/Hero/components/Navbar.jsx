@@ -16,6 +16,7 @@ import {
 import logo from '../../../../../assets/HomePage/logo.svg';
 import LoginModal from './Login/LoginModal';
 import SignUpModal from './SignUp/SignUpModal';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCookie, getUsernameUrl } from '../../../../../utils/cookies';
 import { SignOutIcon, ProfileIcon } from '../../../../../assets/Icons/icons';
@@ -60,7 +61,9 @@ export default function Navbar() {
             ></Avatar>
           </MenuButton>
           <MenuList>
-            <MenuItem icon={<ProfileIcon />}>My Account</MenuItem>
+            <Link to={'/my-profile'}>
+              <MenuItem icon={<ProfileIcon />}>My Account</MenuItem>
+            </Link>
             <MenuDivider />
             <MenuItem icon={<SignOutIcon />} onClick={signOut}>
               Sign Out

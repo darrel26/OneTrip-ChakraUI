@@ -11,7 +11,9 @@ import EditTripSection from './Section/EditTrip/EditTripSection';
 import { useSelector, useDispatch } from 'react-redux';
 
 import generateTrip from '../../utils/generate';
-import { storeMapsLoad } from '../../Redux/ReduxSlices';
+import { storeMapsLoad, storeRecommendation } from '../../Redux/ReduxSlices';
+import axios from 'axios';
+import { getCookie } from '../../utils/cookies';
 
 let placeServices;
 let directionService;
@@ -29,8 +31,9 @@ export default function TripPage() {
   const generateAuto = useSelector(
     (state) => state.trip.recommendationRestriction
   );
-
   const getLocationDetail = useSelector((state) => state.trip.location);
+  const getStartDate = useSelector((state) => state.trip.originsDate);
+  const getEndDate = useSelector((state) => state.trip.destinationDate);
   const dispatch = useDispatch();
 
   const basedPlaceId = {
@@ -172,6 +175,34 @@ export default function TripPage() {
     });
   };
 
+  /* SAVE TRIP */
+
+  const saveTrip = async () => {
+    const config = {
+      headers: { Authorization: `Bearer ${getCookie('token')}` },
+    };
+
+    const tripData = {
+      title: `Trip to ${getLocationDetail.name}`,
+      basedLocation: getLocationDetail,
+      tripDate: {
+        startDate: getStartDate,
+        endDate: getEndDate,
+      },
+      places: [...placeData],
+      budget: budgetting.budget,
+      expenses: budgetting.expenses,
+    };
+
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/trip/add-trip`,
+      tripData,
+      config
+    );
+
+    return response;
+  };
+
   return (
     <Container maxW="100vw" p={0}>
       <HStack p={0} spacing={0}>
@@ -184,7 +215,6 @@ export default function TripPage() {
                 travelMode: 'DRIVING',
               }}
               callback={(response) => {
-                console.log(response);
                 const elements = response.rows
                   .map((data) => data.elements)
                   .map((e) => e.map((data) => data.duration.value));
@@ -209,6 +239,7 @@ export default function TripPage() {
           budgetting={budgetting}
           addBudget={addBudget}
           addExpenses={addExpenses}
+          saveTrip={saveTrip}
         />
         <GoogleMap
           mapContainerStyle={{

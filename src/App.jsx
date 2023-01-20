@@ -6,6 +6,7 @@ import HomePage from './Components/HomePage/HomePage';
 import TripPage from './Components/TripPage/TripPage';
 import { SkeletonCircle } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
+import MyProfilePage from './Components/MyProfilePage/MyProfilePage';
 
 export default function App() {
   const lib = useSelector((state) => state.trip.mapsLibraries);
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/trip" element={<TripPage />} />
         <Route path="/addTrip" element={<AddTrip />} />
+        <Route path="/my-profile" element={<MyProfilePage />} />
       </Routes>
     </Router>
   );

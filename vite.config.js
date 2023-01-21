@@ -3,6 +3,6 @@ import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: 'https://darrel26.github.io/OneTrip-ChakraUI/',
+  base: '/OneTrip-ChakraUI/',
   plugins: [react()],
 });

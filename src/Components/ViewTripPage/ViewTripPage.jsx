@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Box, Button, Container, HStack } from '@chakra-ui/react';
 import EditTripSection from './Section/EditTripSection';
-import { GoogleMap } from '@react-google-maps/api';
+import { GoogleMap, DirectionsRenderer } from '@react-google-maps/api';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   storeBasedLocation,
@@ -23,7 +23,7 @@ export default function ViewTripPage() {
   const { id } = useParams();
   const getPlaceData = useSelector((state) => state.trip.placeData);
   const getBasedLocation = useSelector((state) => state.trip.basedLocation);
-
+  const [route, setRoute] = useState(null);
   const [center, setCenter] = useState();
 
   useEffect(() => {
@@ -59,6 +59,28 @@ export default function ViewTripPage() {
     });
   };
 
+    const getRoute = async () => {
+    let newWayPoint = [];
+    let waypoint = getPlaceData.slice(1, getPlaceData.length - 1);
+    waypoint.forEach((item) => {
+      newWayPoint.push({
+        location: item.geometry.location,
+        stopover: true,
+      });
+    });
+    const directionService = new google.maps.DirectionsService();
+    let origin = getPlaceData[0].geometry.location
+    let destination = getPlaceData[getPlaceData.length - 1].geometry.location
+    console.log("origin", origin);
+    const result = await directionService.route({
+      origin: origin,
+      destination: destination,
+      waypoints: newWayPoint,
+      travelMode: google.maps.TravelMode.DRIVING,
+    });
+    setRoute(result);
+  };
+
   const onLoad = (map) => {
     service = new window.google.maps.places.PlacesService(map);
   };
@@ -70,7 +92,10 @@ export default function ViewTripPage() {
         lng: getPlaceData[getPlaceData.length - 1].geometry.location.lng,
       });
     }
+    console.log(getPlaceData);
+    getRoute()
   }, [getPlaceData]);
+  
 
   return (
     <>
@@ -86,7 +111,9 @@ export default function ViewTripPage() {
                 onLoad(map);
                 dispatch(storeMapsLoad(map));
               }}
-            ></GoogleMap>
+            >
+              {route && <DirectionsRenderer directions={route} />}
+            </GoogleMap>
           </HStack>
         </Container>
       )}

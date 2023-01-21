@@ -27,8 +27,6 @@ export default function TripPage() {
   const [placeData, setPlaceData] = useState([]);
   const [nearby, setNearby] = useState([]);
   const [route, setRoute] = useState(null);
-  const [showRoute, setShowRoute] = useState(false);
-  const [markerVisible, setMarkerVisible] = useState(true);
   const tripTime = useSelector((state) => state.trip.journeyTime);
   const placeTime = useSelector((state) => state.trip.placeTime);
 
@@ -75,7 +73,7 @@ export default function TripPage() {
     });
   };
 
-  const getRoute = async (mapOrigin, mapDestination) => {
+  const getRoute = async () => {
     let newWayPoint = [];
     let waypoint = dataStore.slice(1, dataStore.length - 1);
     waypoint.forEach((item) => {
@@ -101,13 +99,8 @@ export default function TripPage() {
       travelMode: google.maps.TravelMode.DRIVING,
     });
     setRoute(result);
-    setMarkerVisible(false);
   };
 
-  const clearRoute = () => {
-    setRoute(null);
-    setMarkerVisible(true);
-  };
 
   const onLoad = (map) => {
     directionService = new google.maps.DirectionsService();
@@ -166,6 +159,12 @@ export default function TripPage() {
       budget: amount,
     });
   };
+
+  useEffect(() => {
+    if (dataStore.length > 1) {
+      getRoute()
+    }
+  },[dataStore])
 
   /* SAVE TRIP */
 
@@ -256,28 +255,8 @@ export default function TripPage() {
             display="flex"
             justifyContent="center"
           >
-            <Button
-              onClick={markerVisible === false ? clearRoute : getRoute}
-              zIndex="modal"
-              borderRadius="lg"
-              colorScheme="teal"
-              shadow="base"
-              width="200px"
-            >
-              {markerVisible === false ? 'Hide Route' : 'Show Route'}
-            </Button>
           </Box>
           {route && <DirectionsRenderer directions={route} />}
-          {dataStore.map((item, index) => (
-            <MarkerF
-              visible={markerVisible}
-              key={index}
-              position={{
-                lat: item.geometry.location.lat(),
-                lng: item.geometry.location.lng(),
-              }}
-            />
-          ))}
         </GoogleMap>
       </HStack>
     </Container>

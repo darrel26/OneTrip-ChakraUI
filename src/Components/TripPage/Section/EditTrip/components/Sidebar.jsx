@@ -1,6 +1,5 @@
-import { Avatar, IconButton, VStack } from '@chakra-ui/react';
+import { Avatar, IconButton, VStack, Link } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { Link } from 'react-router-dom';
 import React from 'react';
 import { LocationIcon, DollarIcon } from '../../../../../assets/Icons/icons';
 import { getCookie, getUsernameUrl } from '../../../../../utils/cookies';
@@ -16,7 +15,7 @@ export default function Sidebar() {
       boxShadow="0px 4px 12px 0 rgba(0,0,0,0.05)"
       justifyContent="space-between"
     >
-      <Link to="/">
+      <Link href="/">
         <IconButton icon={<ArrowBackIcon />}></IconButton>
       </Link>
       <VStack h="65vh" spacing={8}>

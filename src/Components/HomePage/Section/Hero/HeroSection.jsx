@@ -11,7 +11,7 @@ import HeroBg from '../../../../assets/HomePage/hero-section-bg.jpg';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   storeDestinationDate,
-  storeLocation,
+  storeBasedLocation,
   storeOriginsDate,
 } from '../../../../Redux/ReduxSlices';
 
@@ -25,7 +25,7 @@ export default function HomePage() {
   const location = useRef();
   const getOriginsDate = useSelector((state) => state.trip.originsDate);
   const getDestinationDate = useSelector((state) => state.trip.destinationDate);
-  const getLocation = useSelector((state) => state.trip.location);
+  const getLocation = useSelector((state) => state.trip.basedLocation);
 
   const allowAddTrip = () => {
     if (
@@ -42,7 +42,7 @@ export default function HomePage() {
   const storeToRedux = () => {
     dispatch(storeOriginsDate(originsDate.current.value));
     dispatch(storeDestinationDate(destinationDate.current.value));
-    dispatch(storeLocation(placeDetail));
+    dispatch(storeBasedLocation(placeDetail));
   };
 
   return (

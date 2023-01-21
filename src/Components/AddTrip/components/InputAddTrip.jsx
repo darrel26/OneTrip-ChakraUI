@@ -17,7 +17,7 @@ import { LocationIcon } from '../../../assets/Icons/icons';
 import { useSelector } from 'react-redux';
 
 const InputAddTrip = () => {
-  const location = useSelector((state) => state.trip.location);
+  const location = useSelector((state) => state.trip.basedLocation);
   const originsDate = useSelector((state) => state.trip.originsDate);
   const destinationDate = useSelector((state) => state.trip.destinationDate);
 

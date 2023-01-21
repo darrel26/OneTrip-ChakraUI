@@ -11,7 +11,11 @@ import EditTripSection from './Section/EditTrip/EditTripSection';
 import { useSelector, useDispatch } from 'react-redux';
 
 import generateTrip from '../../utils/generate';
-import { storeMapsLoad, storeRecommendation, storePLaceData } from '../../Redux/ReduxSlices';
+import {
+  storeMapsLoad,
+  storeUserPreference,
+  storePLaceData,
+} from '../../Redux/ReduxSlices';
 import axios from 'axios';
 import { getCookie } from '../../utils/cookies';
 
@@ -28,10 +32,8 @@ export default function TripPage() {
   const tripTime = useSelector((state) => state.trip.journeyTime);
   const placeTime = useSelector((state) => state.trip.placeTime);
 
-  const generateAuto = useSelector(
-    (state) => state.trip.recommendationRestriction
-  );
-  const getLocationDetail = useSelector((state) => state.trip.location);
+  const generateAuto = useSelector((state) => state.trip.userPreference);
+  const getLocationDetail = useSelector((state) => state.trip.basedLocation);
   const getStartDate = useSelector((state) => state.trip.originsDate);
   const getEndDate = useSelector((state) => state.trip.destinationDate);
   const dispatch = useDispatch();
@@ -62,22 +64,8 @@ export default function TripPage() {
   const getRecommendation = (geometry) => {
     const request = {
       location: geometry,
-      radius: '1000',
-      type: [
-        'amusement_park',
-        'bakery',
-        'bar',
-        'bowling_alley',
-        'cafe',
-        'shopping_mall',
-        'stadium',
-        'spa',
-        'zoo',
-        'movie_theater',
-        'mosque',
-        'church',
-        'restaurant',
-      ],
+      radius: '5000',
+      type: ['tourist_attraction'],
     };
     placeServices.nearbySearch(request, (response) => {
       const filteredPlace = response.filter(
@@ -222,8 +210,12 @@ export default function TripPage() {
                 const elements = response.rows
                   .map((data) => data.elements)
                   .map((e) => e.map((data) => data.duration.value));
-                  dispatch(storePLaceData(generateTrip(elements, nearby, placeTime, tripTime)));
-                  dispatch(storeRecommendation(null));
+                dispatch(
+                  storePLaceData(
+                    generateTrip(elements, nearby, placeTime, tripTime)
+                  )
+                );
+                dispatch(storeUserPreference(null));
               }}
             />
           ) : (

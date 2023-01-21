@@ -7,7 +7,7 @@ import TripPage from './Components/TripPage/TripPage';
 import { SkeletonCircle } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import MyProfilePage from './Components/MyProfilePage/MyProfilePage';
-import ViewTripPage from './Components/TripPage/ViewTripPage';
+import ViewTripPage from './Components/ViewTripPage/ViewTripPage';
 
 export default function App() {
   const lib = useSelector((state) => state.trip.mapsLibraries);

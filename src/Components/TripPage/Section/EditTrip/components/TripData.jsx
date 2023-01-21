@@ -24,7 +24,7 @@ export default function TripData({
   addExpenses,
   saveTrip,
 }) {
-  const getPlaceDataInit = useSelector((state) => state.trip.location);
+  const getPlaceDataInit = useSelector((state) => state.trip.basedLocation);
   const getOriginDate = useSelector((state) => state.trip.originsDate);
   const getDestDate = useSelector((state) => state.trip.destinationDate);
   return (

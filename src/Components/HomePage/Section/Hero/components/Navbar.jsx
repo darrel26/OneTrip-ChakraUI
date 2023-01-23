@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getCookie, getUsernameUrl } from '../../../../../utils/cookies';
 import { SignOutIcon, ProfileIcon } from '../../../../../assets/Icons/icons';
 
-export default function Navbar() {
+export default function Navbar({setLogin}) {
   const {
     isOpen: isLoginOpen,
     onOpen: onLoginOpen,
@@ -71,7 +71,7 @@ export default function Navbar() {
           <Button colorScheme="teal" variant="ghost" onClick={onLoginOpen}>
             Login
           </Button>
-          <LoginModal isOpen={isLoginOpen} onClose={onLoginClose} />
+          <LoginModal setLogin={setLogin} isOpen={isLoginOpen} onClose={onLoginClose} />
           <Button colorScheme="teal" variant="solid" onClick={onSignUpOpen}>
             Sign up
           </Button>

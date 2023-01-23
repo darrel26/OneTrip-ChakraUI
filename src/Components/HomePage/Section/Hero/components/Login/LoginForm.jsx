@@ -17,7 +17,7 @@ import {
 import axios from 'axios';
 import { EmailIcon, LockIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
-export default function LoginForm({ onClose }) {
+export default function LoginForm({ onClose, setLogin }) {
   const { isOpen, onToggle } = useDisclosure();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -70,6 +70,7 @@ export default function LoginForm({ onClose }) {
                 status: 'success',
               });
               sessionStorage.setItem("loginStatus", true);
+              setLogin(true);
             }
           )
           .catch((error) => {

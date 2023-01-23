@@ -16,7 +16,7 @@ import {
 import LoginForm from './LoginForm';
 import OneTripLogo from '../../../../../../assets/HomePage/Logo.svg';
 
-export default function LoginModal({ isOpen, onClose }) {
+export default function LoginModal({ isOpen, onClose, setLogin }) {
   return (
     <Modal
       isOpen={isOpen}
@@ -48,7 +48,7 @@ export default function LoginModal({ isOpen, onClose }) {
         </VStack>
         <ModalCloseButton />
         <ModalBody>
-          <LoginForm onClose={onClose} />
+          <LoginForm onClose={onClose} setLogin={setLogin}/>
         </ModalBody>
       </ModalContent>
     </Modal>

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Container, Flex, HStack, VStack, IconButton } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { AddIcon } from '@chakra-ui/icons';
@@ -45,6 +45,14 @@ export default function HomePage() {
     dispatch(storeBasedLocation(placeDetail));
   };
 
+  const [login, setLogin] = useState(false);
+
+   useEffect(() =>{
+    if(sessionStorage.getItem("loginStatus")){
+      setLogin(true)
+    }
+  },[login])
+
   return (
     <Container
       maxW="100vw"
@@ -57,7 +65,7 @@ export default function HomePage() {
     >
       <Flex h="100vh" w="container.xl">
         <VStack w="full" h="full">
-          <Navbar />
+          <Navbar setLogin={setLogin}/>
           <VStack
             w="full"
             h="80%"
@@ -66,8 +74,12 @@ export default function HomePage() {
             px={20}
             justify="center"
           >
-            <HeroTitle />
-            <HeroDescription />
+            <div>
+              <HeroTitle />
+            </div>
+            <div>
+              <HeroDescription />
+            </div>
             <HStack
               padding={2}
               spacing={0}
@@ -92,6 +104,7 @@ export default function HomePage() {
               />
               <Link to={isDisable}>
                 <IconButton
+                  disabled={login ? false : true}
                   onClick={storeToRedux}
                   Link
                   colorScheme="teal"

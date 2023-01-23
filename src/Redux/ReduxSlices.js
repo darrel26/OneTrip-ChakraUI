@@ -1,35 +1,56 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  location: '',
+  basedLocation: {},
   originsDate: '',
   destinationDate: '',
   mapsLibraries: ['places'],
-  recommendationRestriction: '',
+  userPreference: '',
   placeData: [],
   maps: null,
   journeyTime: 3600,
   placeTime: 3600,
+  loginStatus: false,
+  userTrip: [],
+  placeData: [],
+  budget: 0,
+  expenses: [],
+  nearbyRecommendation: [],
 };
 
 export const tripSlice = createSlice({
   name: 'trip',
   initialState,
   reducers: {
+    /* HOME PAGE */
+    storeLoginStatus: (state, action) => {
+      state.loginStatus = action.payload;
+    },
+    /* TRIP DATA */
     storeOriginsDate: (state, action) => {
       state.originsDate = action.payload;
     },
     storeDestinationDate: (state, action) => {
       state.destinationDate = action.payload;
     },
-    storeLocation: (state, action) => {
-      state.location = action.payload;
-    },
-    storeRecommendation: (state, action) => {
-      state.recommendationRestriction = action.payload;
+    storeBasedLocation: (state, action) => {
+      state.basedLocation = action.payload;
     },
     storePLaceData: (state, action) => {
-      state.placeData = [...state.placeData, action.payload];
+      state.placeData = action.payload;
+    },
+    storeBudget: (state, action) => {
+      state.budget = action.payload;
+    },
+    storeExpenses: (state, action) => {
+      state.expenses = action.payload;
+    },
+    /* TRIP PAGE */
+    storeUserPreference: (state, action) => {
+      state.userPreference = action.payload;
+    },
+    storeNearbyRecommendation: (state, action) => {
+      state.nearbyRecommendation = action.payload;
     },
     storeMapsLoad: (state, action) => {
       state.maps = action.payload;
@@ -41,19 +62,28 @@ export const tripSlice = createSlice({
     storeTimePlace: (state, action) => {
       state.placeTime = action.payload * 3600;
     },
+    /* MY PROFILE PAGE */
+    storeUserTrip: (state, action) => {
+      state.userTrip = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
 export const {
   storeDestinationDate,
-  storeLocation,
+  storeBasedLocation,
   storeOriginsDate,
-  storeRecommendation,
+  storeUserPreference,
   storePLaceData,
   storeMapsLoad,
   storeTimePlace,
   storeTimeJourney,
+  storeLoginStatus,
+  storeUserTrip,
+  storeBudget,
+  storeExpenses,
+  storeNearbyRecommendation,
 } = tripSlice.actions;
 
 export default tripSlice.reducer;

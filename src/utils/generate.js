@@ -24,13 +24,11 @@ const generateTrip = (data, nearby, placeCost, tripCost) => {
     temp = nextIndex;
     prevIndex = temp;
     nextIndex = findNextIndex;
-    console.log('CURRENT COST : ', cost);
     if (cost + placeCost + minValue > tripCost) {
       break;
     }
 
     cost = cost + placeCost + minValue;
-    console.log('NEW COST : ', cost);
     path.push(nearby[nextIndex - 1]);
 
     for (let j = 0; j < graph.length; j++) {

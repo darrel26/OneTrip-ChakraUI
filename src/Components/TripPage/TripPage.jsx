@@ -11,9 +11,14 @@ import EditTripSection from './Section/EditTrip/EditTripSection';
 import { useSelector, useDispatch } from 'react-redux';
 
 import generateTrip from '../../utils/generate';
-import { storeRecommendation, storeMapsLoad } from '../../Redux/ReduxSlices';
+import {
+  storeMapsLoad,
+  storeUserPreference,
+  storePLaceData,
+} from '../../Redux/ReduxSlices';
+import axios from 'axios';
+import { getCookie } from '../../utils/cookies';
 
-let libraries = ['places'];
 let placeServices;
 let directionService;
 
@@ -22,15 +27,13 @@ export default function TripPage() {
   const [placeData, setPlaceData] = useState([]);
   const [nearby, setNearby] = useState([]);
   const [route, setRoute] = useState(null);
-  const [showRoute, setShowRoute] = useState(false);
-  const [markerVisible, setMarkerVisible] = useState(true);
   const tripTime = useSelector((state) => state.trip.journeyTime);
   const placeTime = useSelector((state) => state.trip.placeTime);
 
-  const generateAuto = useSelector(
-    (state) => state.trip.recommendationRestriction
-  );
-  const getLocationDetail = useSelector((state) => state.trip.location);
+  const generateAuto = useSelector((state) => state.trip.userPreference);
+  const getLocationDetail = useSelector((state) => state.trip.basedLocation);
+  const getStartDate = useSelector((state) => state.trip.originsDate);
+  const getEndDate = useSelector((state) => state.trip.destinationDate);
   const dispatch = useDispatch();
 
   const basedPlaceId = {
@@ -43,34 +46,24 @@ export default function TripPage() {
   };
 
   const [placeId, setPlaceId] = useState([basedPlaceId]);
+  const dataStore = useSelector((state) => state.trip.placeData);
 
   const addPlaces = (placeDetail) => {
-    if (placeData.length !== 0) {
-      setPlaceData([...placeData, placeDetail]);
+    if (dataStore.length !== 0) {
+      dispatch(storePLaceData([...dataStore, placeDetail]));
+      // setPlaceData([...placeData, placeDetail]);
     } else {
-      setPlaceData([placeDetail]);
+      dispatch(storePLaceData([placeDetail]));
+      // setPlaceData([placeDetail]);
     }
+    console.log(dataStore);
   };
 
   const getRecommendation = (geometry) => {
     const request = {
       location: geometry,
-      radius: '1000',
-      type: [
-        'amusement_park',
-        'bakery',
-        'bar',
-        'bowling_alley',
-        'cafe',
-        'shopping_mall',
-        'stadium',
-        'spa',
-        'zoo',
-        'movie_theater',
-        'mosque',
-        'church',
-        'restaurant',
-      ],
+      radius: '5000',
+      type: ['tourist_attraction'],
     };
     placeServices.nearbySearch(request, (response) => {
       const filteredPlace = response.filter(
@@ -80,9 +73,9 @@ export default function TripPage() {
     });
   };
 
-  const getRoute = async (mapOrigin, mapDestination) => {
+  const getRoute = async () => {
     let newWayPoint = [];
-    let waypoint = placeData.slice(1, placeData.length - 1);
+    let waypoint = dataStore.slice(1, dataStore.length - 1);
     waypoint.forEach((item) => {
       newWayPoint.push({
         location: {
@@ -95,24 +88,19 @@ export default function TripPage() {
     const directionService = new google.maps.DirectionsService();
     const result = await directionService.route({
       origin: {
-        lat: placeData[0].geometry.location.lat(),
-        lng: placeData[0].geometry.location.lng(),
+        lat: dataStore[0].geometry.location.lat(),
+        lng: dataStore[0].geometry.location.lng(),
       },
       destination: {
-        lat: placeData[placeData.length - 1].geometry.location.lat(),
-        lng: placeData[placeData.length - 1].geometry.location.lng(),
+        lat: dataStore[dataStore.length - 1].geometry.location.lat(),
+        lng: dataStore[dataStore.length - 1].geometry.location.lng(),
       },
       waypoints: newWayPoint,
       travelMode: google.maps.TravelMode.DRIVING,
     });
     setRoute(result);
-    setMarkerVisible(false);
   };
 
-  const clearRoute = () => {
-    setRoute(null);
-    setMarkerVisible(true);
-  };
 
   const onLoad = (map) => {
     directionService = new google.maps.DirectionsService();
@@ -137,13 +125,13 @@ export default function TripPage() {
   };
 
   useEffect(() => {
-    if (placeData.length > 0) {
+    if (dataStore.length > 0) {
       getRecommendation({
-        lat: placeData[placeData.length - 1].geometry.location.lat(),
-        lng: placeData[placeData.length - 1].geometry.location.lng(),
+        lat: dataStore[dataStore.length - 1].geometry.location.lat(),
+        lng: dataStore[dataStore.length - 1].geometry.location.lng(),
       });
     }
-  }, [placeData]);
+  }, [dataStore]);
 
   /* BUDGETTING */
 
@@ -172,6 +160,40 @@ export default function TripPage() {
     });
   };
 
+  useEffect(() => {
+    if (dataStore.length > 1) {
+      getRoute()
+    }
+  },[dataStore])
+
+  /* SAVE TRIP */
+
+  const saveTrip = async () => {
+    const config = {
+      headers: { Authorization: `Bearer ${getCookie('token')}` },
+    };
+
+    const tripData = {
+      title: `Trip to ${getLocationDetail.name}`,
+      basedLocation: getLocationDetail,
+      tripDate: {
+        startDate: getStartDate,
+        endDate: getEndDate,
+      },
+      places: [...dataStore],
+      budget: budgetting.budget,
+      expenses: budgetting.expenses,
+    };
+
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/trip/add-trip`,
+      tripData,
+      config
+    );
+
+    return response;
+  };
+
   return (
     <Container maxW="100vw" p={0}>
       <HStack p={0} spacing={0}>
@@ -184,14 +206,15 @@ export default function TripPage() {
                 travelMode: 'DRIVING',
               }}
               callback={(response) => {
-                console.log(response);
                 const elements = response.rows
                   .map((data) => data.elements)
                   .map((e) => e.map((data) => data.duration.value));
-                setPlaceData(
-                  generateTrip(elements, nearby, placeTime, tripTime)
+                dispatch(
+                  storePLaceData(
+                    generateTrip(elements, nearby, placeTime, tripTime)
+                  )
                 );
-                dispatch(storeRecommendation(null));
+                dispatch(storeUserPreference(null));
               }}
             />
           ) : (
@@ -204,11 +227,12 @@ export default function TripPage() {
           center={center}
           recommendation={recommendation}
           setRecommendation={onLoad}
-          placeData={placeData}
+          placeData={dataStore}
           addPlaces={addPlaces}
           budgetting={budgetting}
           addBudget={addBudget}
           addExpenses={addExpenses}
+          saveTrip={saveTrip}
         />
         <GoogleMap
           mapContainerStyle={{
@@ -231,28 +255,8 @@ export default function TripPage() {
             display="flex"
             justifyContent="center"
           >
-            <Button
-              onClick={markerVisible === false ? clearRoute : getRoute}
-              zIndex="modal"
-              borderRadius="lg"
-              colorScheme="teal"
-              shadow="base"
-              width="200px"
-            >
-              {markerVisible === false ? 'Hide Route' : 'Show Route'}
-            </Button>
           </Box>
           {route && <DirectionsRenderer directions={route} />}
-          {placeData.map((item, index) => (
-            <MarkerF
-              visible={markerVisible}
-              key={index}
-              position={{
-                lat: item.geometry.location.lat(),
-                lng: item.geometry.location.lng(),
-              }}
-            />
-          ))}
         </GoogleMap>
       </HStack>
     </Container>

@@ -2,6 +2,7 @@ import { Avatar, IconButton, VStack, Link } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import React from 'react';
 import { LocationIcon, DollarIcon } from '../../../../../assets/Icons/icons';
+import { getCookie, getUsernameUrl } from '../../../../../utils/cookies';
 
 export default function Sidebar() {
   return (
@@ -21,11 +22,15 @@ export default function Sidebar() {
         <IconButton icon={<LocationIcon />} />
         <IconButton icon={<DollarIcon />} />
       </VStack>
-      <Avatar
-        size="md"
-        name="Dionisius Darrel"
-        src="https://bit.ly/darrel-dionisius"
-      ></Avatar>
+      {getCookie('username') !== null ? (
+        <Avatar
+          size="md"
+          name={getCookie('username')}
+          src={getUsernameUrl()}
+        ></Avatar>
+      ) : (
+        <Avatar src="https://bit.ly/broken-link" />
+      )}
     </VStack>
   );
 }

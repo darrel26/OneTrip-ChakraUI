@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
+  tripTitle: '',
   basedLocation: {},
   originsDate: '',
   destinationDate: '',
@@ -27,6 +28,9 @@ export const tripSlice = createSlice({
       state.loginStatus = action.payload;
     },
     /* TRIP DATA */
+    storeTripTitle: (state, action) => {
+      state.tripTitle = action.payload;
+    },
     storeOriginsDate: (state, action) => {
       state.originsDate = action.payload;
     },
@@ -71,6 +75,7 @@ export const tripSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
+  storeTripTitle,
   storeDestinationDate,
   storeBasedLocation,
   storeOriginsDate,

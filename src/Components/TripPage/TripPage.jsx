@@ -6,7 +6,7 @@ import {
   DistanceMatrixService,
   DirectionsRenderer,
 } from '@react-google-maps/api';
-import { Box, Button, Container, HStack } from '@chakra-ui/react';
+import { Box, Button, Container, HStack, useToast } from '@chakra-ui/react';
 import EditTripSection from './Section/EditTrip/EditTripSection';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -18,11 +18,14 @@ import {
 } from '../../Redux/ReduxSlices';
 import axios from 'axios';
 import { getCookie } from '../../utils/cookies';
+import { useNavigate } from 'react-router-dom';
 
 let placeServices;
 let directionService;
 
 export default function TripPage() {
+  const navigate = useNavigate();
+
   const [recommendation, setRecommendation] = useState([]);
   const [placeData, setPlaceData] = useState([]);
   const [nearby, setNearby] = useState([]);
@@ -35,6 +38,16 @@ export default function TripPage() {
   const getStartDate = useSelector((state) => state.trip.originsDate);
   const getEndDate = useSelector((state) => state.trip.destinationDate);
   const dispatch = useDispatch();
+
+  const toast = useToast({
+    position: 'top-right',
+    variant: 'left-accent',
+    duration: 3000,
+    containerStyle: {
+      width: '250px',
+      maxW: '100%',
+    },
+  });
 
   const basedPlaceId = {
     placeId: getLocationDetail.place_id,
@@ -101,7 +114,6 @@ export default function TripPage() {
     setRoute(result);
   };
 
-
   const onLoad = (map) => {
     directionService = new google.maps.DirectionsService();
     placeServices = new google.maps.places.PlacesService(map);
@@ -162,9 +174,9 @@ export default function TripPage() {
 
   useEffect(() => {
     if (dataStore.length > 1) {
-      getRoute()
+      getRoute();
     }
-  },[dataStore])
+  }, [dataStore]);
 
   /* SAVE TRIP */
 
@@ -185,13 +197,24 @@ export default function TripPage() {
       expenses: budgetting.expenses,
     };
 
-    const response = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/trip/add-trip`,
-      tripData,
-      config
-    );
-
-    return response;
+    await axios
+      .post(`${import.meta.env.VITE_BASE_URL}/trip/add-trip`, tripData, config)
+      .then(({ status, data }) => {
+        toast({
+          title: status,
+          description: data.message,
+          status: 'success',
+        });
+        navigate('/my-profile');
+      })
+      .catch(({ response }) => {
+        const { status, message } = response.data.error;
+        toast({
+          title: status,
+          description: message,
+          status: 'error',
+        });
+      });
   };
 
   return (
@@ -254,8 +277,7 @@ export default function TripPage() {
             zIndex="modal"
             display="flex"
             justifyContent="center"
-          >
-          </Box>
+          ></Box>
           {route && <DirectionsRenderer directions={route} />}
         </GoogleMap>
       </HStack>

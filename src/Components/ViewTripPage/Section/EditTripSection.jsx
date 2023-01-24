@@ -131,7 +131,7 @@ export default function EditTripSection() {
           alignItems="flex-start"
         >
           <VStack alignItems="flex-start" spacing={4}>
-            <Heading fontWeight="medium">Trip to {getTripTitle}</Heading>
+            <Heading fontWeight="medium">{getTripTitle}</Heading>
             <HStack>
               <Icon as={CalendarIcon}></Icon>
               <Text>

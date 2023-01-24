@@ -20,6 +20,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import PlaceToVisit from './components/PlaceToVisit';
+import Budgetting from '../../TripPage/Section/EditTrip/components/Budgetting';
 
 export default function EditTripSection() {
   const { id } = useParams();
@@ -165,6 +166,7 @@ export default function EditTripSection() {
         </HStack>
         <Accordion w="full" defaultIndex={[0]} allowMultiple py={10}>
           <PlaceToVisit />
+          <Budgetting />
         </Accordion>
       </VStack>
     </Flex>

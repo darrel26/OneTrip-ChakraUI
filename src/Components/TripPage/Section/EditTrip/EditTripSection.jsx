@@ -9,9 +9,6 @@ export default function EditTripSection({
   setRecommendation,
   placeData,
   addPlaces,
-  budgetting,
-  addBudget,
-  addExpenses,
   saveTrip,
 }) {
   return (
@@ -23,9 +20,6 @@ export default function EditTripSection({
         setRecommendation={setRecommendation}
         placeData={placeData}
         addPlaces={addPlaces}
-        budgetting={budgetting}
-        addBudget={addBudget}
-        addExpenses={addExpenses}
         saveTrip={saveTrip}
       />
     </Flex>

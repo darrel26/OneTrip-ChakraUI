@@ -16,11 +16,24 @@ import {
   Input,
   Select,
 } from '@chakra-ui/react';
+import { storeExpenses } from '../../../../../Redux/ReduxSlices';
 import { RupiahIcon } from '../../../../../assets/Icons/icons';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function AddExpensesModal({ isOpen, onClose, addExpenses }) {
+export default function AddExpensesModal({ isOpen, onClose }) {
   const amount = useRef(null);
   const category = useRef(null);
+
+  const getExpenses = useSelector((state) => state.trip.expenses);
+  const dispatch = useDispatch();
+
+  const addExpenses = (category, amount) => {
+    const newExpenses = {
+      category,
+      amount,
+    };
+    dispatch(storeExpenses([...getExpenses, newExpenses]));
+  };
 
   return (
     <Modal

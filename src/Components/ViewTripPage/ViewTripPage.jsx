@@ -14,6 +14,8 @@ import {
   storeNearbyRecommendation,
   storeOriginsDate,
   storePLaceData,
+  storeBudget,
+  storeExpenses,
 } from '../../Redux/ReduxSlices';
 import { useParams } from 'react-router-dom';
 import { getCookie } from '../../utils/cookies';
@@ -41,6 +43,8 @@ export default function ViewTripPage() {
     dispatch(storeOriginsDate(data.tripDate.startDate));
     dispatch(storeDestinationDate(data.tripDate.endDate));
     dispatch(storePLaceData(data.places));
+    dispatch(storeBudget(data.budget));
+    dispatch(storeExpenses(data.expenses));
     setCenter(data.basedLocation.geometry.location);
     return data;
   };

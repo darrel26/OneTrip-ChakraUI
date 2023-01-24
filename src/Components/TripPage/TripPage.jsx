@@ -15,6 +15,8 @@ import {
   storeMapsLoad,
   storeUserPreference,
   storePLaceData,
+  storeBudget,
+  storeExpenses,
 } from '../../Redux/ReduxSlices';
 import axios from 'axios';
 import { getCookie } from '../../utils/cookies';
@@ -37,6 +39,8 @@ export default function TripPage() {
   const getLocationDetail = useSelector((state) => state.trip.basedLocation);
   const getStartDate = useSelector((state) => state.trip.originsDate);
   const getEndDate = useSelector((state) => state.trip.destinationDate);
+  const getBudget = useSelector((state) => state.trip.budget);
+  const getExpenses = useSelector((state) => state.trip.expenses);
   const dispatch = useDispatch();
 
   const toast = useToast({
@@ -152,26 +156,6 @@ export default function TripPage() {
     expenses: [],
   });
 
-  const addExpenses = (category, amount) => {
-    setBudgetting({
-      ...budgetting,
-      expenses: [
-        ...budgetting.expenses,
-        {
-          category: category,
-          amount: amount,
-        },
-      ],
-    });
-  };
-
-  const addBudget = (amount) => {
-    setBudgetting({
-      ...budgetting,
-      budget: amount,
-    });
-  };
-
   useEffect(() => {
     if (dataStore.length > 1) {
       getRoute();
@@ -193,8 +177,8 @@ export default function TripPage() {
         endDate: getEndDate,
       },
       places: [...dataStore],
-      budget: budgetting.budget,
-      expenses: budgetting.expenses,
+      budget: getBudget,
+      expenses: getExpenses,
     };
 
     await axios
@@ -252,9 +236,6 @@ export default function TripPage() {
           setRecommendation={onLoad}
           placeData={dataStore}
           addPlaces={addPlaces}
-          budgetting={budgetting}
-          addBudget={addBudget}
-          addExpenses={addExpenses}
           saveTrip={saveTrip}
         />
         <GoogleMap

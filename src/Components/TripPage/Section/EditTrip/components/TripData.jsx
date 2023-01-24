@@ -19,9 +19,6 @@ export default function TripData({
   setRecommendation,
   placeData,
   addPlaces,
-  budgetting,
-  addBudget,
-  addExpenses,
   saveTrip,
 }) {
   const getPlaceDataInit = useSelector((state) => state.trip.basedLocation);
@@ -64,11 +61,7 @@ export default function TripData({
           placeData={placeData}
           addPlaces={addPlaces}
         />
-        <Budgetting
-          budgetting={budgetting}
-          addBudget={addBudget}
-          addExpenses={addExpenses}
-        />
+        <Budgetting />
       </Accordion>
     </VStack>
   );

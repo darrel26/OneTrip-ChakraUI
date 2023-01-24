@@ -20,19 +20,30 @@ import {
   Button,
   useDisclosure,
 } from '@chakra-ui/react';
+import { storeBudget } from '../../../../../Redux/ReduxSlices';
 import { RupiahIcon } from '../../../../../assets/Icons/icons';
 import AddExpensesModal from './AddExpensesModal';
 import ExpensesTable from './ExpensesTable';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function Budgetting({ budgetting, addBudget, addExpenses }) {
+export default function Budgetting() {
   const [edit, setEdit] = useState(false);
   const budgetAmount = useRef(null);
+
+  const dispatch = useDispatch();
 
   const {
     isOpen: isAddExpensesOpen,
     onOpen: onAddExpensesOpen,
     onClose: onAddExpensesClose,
   } = useDisclosure();
+
+  const getExpenses = useSelector((state) => state.trip.expenses);
+  const getBudget = useSelector((state) => state.trip.budget);
+
+  const addBudget = (amount) => {
+    dispatch(storeBudget(amount));
+  };
 
   return (
     <AccordionItem>
@@ -51,7 +62,7 @@ export default function Budgetting({ budgetting, addBudget, addExpenses }) {
               <InputLeftElement h="full" children={<RupiahIcon />} />
               <Input
                 type="number"
-                placeholder="0"
+                placeholder={getBudget}
                 size="md"
                 variant="unstyled"
                 border="none"
@@ -62,9 +73,9 @@ export default function Budgetting({ budgetting, addBudget, addExpenses }) {
             </InputGroup>
             <Progress
               colorScheme={
-                budgetting.expenses.length
-                  ? budgetting.budget <=
-                    budgetting.expenses
+                getExpenses.length
+                  ? getBudget <=
+                    getExpenses
                       .map(({ amount }) => parseInt(amount))
                       .reduce((a, b) => a + b)
                     ? 'red'
@@ -74,12 +85,12 @@ export default function Budgetting({ budgetting, addBudget, addExpenses }) {
               max={100}
               size="lg"
               value={
-                budgetting.expenses.length
+                getExpenses.length
                   ? Math.floor(
-                      (budgetting.expenses
+                      (getExpenses
                         .map(({ amount }) => parseInt(amount))
                         .reduce((a, b) => a + b) /
-                        budgetting.budget) *
+                        getBudget) *
                         100
                     )
                   : 0
@@ -124,11 +135,10 @@ export default function Budgetting({ budgetting, addBudget, addExpenses }) {
             <AddExpensesModal
               isOpen={isAddExpensesOpen}
               onClose={onAddExpensesClose}
-              addExpenses={addExpenses}
             />
           </VStack>
         </HStack>
-        {budgetting.expenses.length ? (
+        {getExpenses.length > 0 ? (
           <TableContainer>
             <Table>
               <Thead>
@@ -138,7 +148,7 @@ export default function Budgetting({ budgetting, addBudget, addExpenses }) {
                   <Th isNumeric>Amount</Th>
                 </Tr>
               </Thead>
-              {budgetting.expenses.map(({ category, amount }, index) => (
+              {getExpenses.map(({ category, amount }, index) => (
                 <ExpensesTable
                   key={index}
                   index={index}

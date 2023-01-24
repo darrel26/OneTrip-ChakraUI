@@ -7,12 +7,15 @@ import EditTripSection from './Section/EditTripSection';
 import { GoogleMap, DirectionsRenderer } from '@react-google-maps/api';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  storeTripTitle,
   storeBasedLocation,
   storeDestinationDate,
   storeMapsLoad,
   storeNearbyRecommendation,
   storeOriginsDate,
   storePLaceData,
+  storeBudget,
+  storeExpenses,
 } from '../../Redux/ReduxSlices';
 import { useParams } from 'react-router-dom';
 import { getCookie } from '../../utils/cookies';
@@ -35,10 +38,13 @@ export default function ViewTripPage() {
       `${import.meta.env.VITE_BASE_URL}/trip/${tripId}`,
       { headers: { Authorization: `Bearer ${getCookie('token')}` } }
     );
+    dispatch(storeTripTitle(data.title));
     dispatch(storeBasedLocation(data.basedLocation));
     dispatch(storeOriginsDate(data.tripDate.startDate));
     dispatch(storeDestinationDate(data.tripDate.endDate));
     dispatch(storePLaceData(data.places));
+    dispatch(storeBudget(data.budget));
+    dispatch(storeExpenses(data.expenses));
     setCenter(data.basedLocation.geometry.location);
     return data;
   };
@@ -59,7 +65,7 @@ export default function ViewTripPage() {
     });
   };
 
-    const getRoute = async () => {
+  const getRoute = async () => {
     let newWayPoint = [];
     let waypoint = getPlaceData.slice(1, getPlaceData.length - 1);
     waypoint.forEach((item) => {
@@ -69,9 +75,9 @@ export default function ViewTripPage() {
       });
     });
     const directionService = new google.maps.DirectionsService();
-    let origin = getPlaceData[0].geometry.location
-    let destination = getPlaceData[getPlaceData.length - 1].geometry.location
-    console.log("origin", origin);
+    let origin = getPlaceData[0].geometry.location;
+    let destination = getPlaceData[getPlaceData.length - 1].geometry.location;
+    console.log('origin', origin);
     const result = await directionService.route({
       origin: origin,
       destination: destination,
@@ -93,9 +99,8 @@ export default function ViewTripPage() {
       });
     }
     console.log(getPlaceData);
-    getRoute()
+    getRoute();
   }, [getPlaceData]);
-  
 
   return (
     <>

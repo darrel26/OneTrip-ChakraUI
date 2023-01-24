@@ -7,8 +7,6 @@ import TripCollection from './Section/TripCollection';
 import { storeUserTrip } from '../../Redux/ReduxSlices';
 import { useDispatch } from 'react-redux';
 
-import { LocationIcon } from '../../assets/Icons/icons';
-
 export default function MyProfilePage() {
   const [toggleEditProfile, setToggleEditProfile] = useState(false);
   const isOnEditProfile = toggleEditProfile ? '' : 'none';

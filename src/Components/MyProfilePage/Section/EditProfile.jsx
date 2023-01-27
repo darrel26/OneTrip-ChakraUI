@@ -48,8 +48,6 @@ export default function EditProfile({
     document.cookie = `username=${newData.username}`;
     document.cookie = `email=${newData.email}`;
 
-    location.reload();
-
     return response;
   };
 

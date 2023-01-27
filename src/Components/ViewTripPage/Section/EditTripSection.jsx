@@ -93,7 +93,7 @@ export default function EditTripSection() {
         boxShadow="0px 4px 12px 0 rgba(0,0,0,0.05)"
         justifyContent="space-between"
       >
-        <Link href="/my-profile">
+        <Link href="/">
           <IconButton icon={<ArrowBackIcon />}></IconButton>
         </Link>
         <VStack h="65vh" spacing={8}>

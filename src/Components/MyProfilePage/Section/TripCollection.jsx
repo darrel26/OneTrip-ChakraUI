@@ -37,13 +37,6 @@ export default function TripCollection() {
                 <CardHeader>
                   <Heading size="md">{trip.title}</Heading>
                 </CardHeader>
-                <CardBody>
-                  <Text>
-                    {typeof trip.basedLocation === 'object'
-                      ? trip.basedLocation.name
-                      : trip.basedLocation}
-                  </Text>
-                </CardBody>
                 <CardFooter>
                   <Button
                     onClick={async (e) => {
